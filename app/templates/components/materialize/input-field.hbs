@@ -1,0 +1,20 @@
+{{#if hasIconPrefix}}
+	<i class="materialize-icons prefix">{{iconName}}</i>
+{{/if}}
+
+{{input 
+	type=inputType 
+	id=computedInputId 
+	value=value 
+	class="validate"
+}}
+
+{{#if label}}
+	<label for="{{computedInputId}}">{{label}}</label>
+{{/if}}
+
+<span class="helper-text" data-error=dataError data-success=dataSuccess>
+	{{#if hasHelpText}}
+		{{helpText}}
+	{{/if}}
+</span>

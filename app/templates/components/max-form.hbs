@@ -1,0 +1,37 @@
+<div class="row">
+	<div class="col s12 input-field">
+		{{#if max.isNew}}
+			{{input id="max-name-input" value=max.name}}
+		{{else}}
+			{{input id="max-name-input" value=max.name disabled="disabled"}}
+		{{/if}}
+		<label for="max-name-input">Enter Lift Name</label>
+	</div>
+	<div class="col s12 input-field">
+		{{input id="max-weight-input" type="number" value=weight}}
+		<label for="max-weight-input">Weight</label>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col">
+		<label for="weight-kg">
+			<input name="weight-type" type="radio" id="weight-kg" value="kg" checked />
+			<span>KG</span>
+		</label>
+	</div>
+	<div class="col">
+		<label for="weight-lbs">
+			<input name="weight-type" type="radio" id="weight-lbs" value="lbs" />
+			<span>LBS</span>
+		</label>
+	</div>
+</div>
+
+<div class="row"></div>
+
+<div class="row">
+	<div class="col s12">
+		<button {{action "maxFormSubmit"}} class="btn-large full-width">Save</button>
+	</div>
+</div>

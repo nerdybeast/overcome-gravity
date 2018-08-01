@@ -1,0 +1,49 @@
+{{page-heading title="Create Workout"}}
+
+<div class="row">
+	<div class="col s12">
+		{{materialize/input-field label="Workout Name"}}
+	</div>
+</div>
+
+<div class="row">
+	{{#if exerciseGroups}}
+		{{#each exerciseGroups as |exerciseGroup|}}
+			<h5>Group {{exerciseGroup.order}}</h5>
+			<div class="divider"></div>
+			{{#each exerciseGroup.exercises as |exercise|}}
+				<div class="row">
+					<div class="col s12">
+						{{materialize/input-field label="Exercise Name" value=exercise.name}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s8">
+						<div class="input-field">
+							{{input type="number" value=exercise.sets placeholder="Sets"}}
+						</div>
+					</div>
+					<div class="col s2">
+						<button class="btn-small">
+							<i class="material-icons">arrow_drop_down</i>
+						</button>
+					</div>
+					<div class="col s2">
+						<button class="btn-small">
+							<i class="material-icons">arrow_drop_up</i>
+						</button>
+					</div>
+				</div>
+			{{/each}}
+		{{/each}}
+	{{/if}}
+</div>
+
+<div class="row">
+	<button {{action "addExerciseGroup"}} class="btn-small right">
+		<i class="material-icons left">add</i>
+		Exercise Group
+	</button>
+</div>
+
+{{outlet}}

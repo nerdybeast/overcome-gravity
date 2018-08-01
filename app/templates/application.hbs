@@ -1,5 +1,38 @@
 {{!-- The following component displays Ember's default welcome message. --}}
-{{welcome-page}}
+{{!welcome-page}}
 {{!-- Feel free to remove this! --}}
 
-{{outlet}}
+<header>
+	<nav>
+		<div class="nav-wrapper">
+
+			{{link-to "OG" "index" class="brand-logo"}}
+			
+			{{!-- This hamburger menu will disappear automatically on large+ views. --}}
+			<a href="#" data-target="navigation-slide-out" class="right sidenav-trigger">
+				<i class="material-icons">menu</i>
+			</a>
+
+			{{!-- LARGE+ VIEW --}}
+			<ul class="right hide-on-med-and-down">
+				<li>
+					{{link-to "Max Lifts" "maxes"}}
+				</li>
+			</ul>
+
+		</div>
+	</nav>
+
+	{{side-nav id="navigation-slide-out"}}
+
+</header>
+
+<main class="container">
+	{{outlet}}
+</main>
+
+<footer class="page-footer">
+	<div class="container">
+		<p>Copyright blah blah blah</p>
+	</div>
+</footer>

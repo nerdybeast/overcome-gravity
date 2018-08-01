@@ -7,6 +7,10 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('max', { path: '/max/:max_id' });
+  this.route('maxes', function() {});
+  this.route('workouts');
+  this.route('workout', { path: '/workout/:workout_id' });
 });
 
 export default Router;

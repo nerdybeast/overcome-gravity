@@ -1,0 +1,17 @@
+{{#each model as |workout|}}
+
+	<div class="card">
+		<div class="row">
+			<div class="col s12">{{workout.name}}</div>
+		</div>
+	</div>
+
+{{/each}}
+
+<div class="row">
+	{{#link-to "workout" "new" class="btn-large full-width"}}
+		ADD NEW WORKOUT
+	{{/link-to}}
+</div>
+
+{{outlet}}

@@ -20,5 +20,12 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
+  app.import('node_modules/materialize-css/dist/js/materialize.min.js')
+  app.import('node_modules/materialize-css/dist/css/materialize.min.css');
+  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.eot');
+  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.svg');
+  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf');
+  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff');
+
   return app.toTree();
 };
