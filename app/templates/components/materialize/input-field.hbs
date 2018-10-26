@@ -3,18 +3,24 @@
 {{/if}}
 
 {{input 
-	type=inputType 
+	type=type 
 	id=computedInputId 
+	placeholder=placeholder
 	value=value 
-	class="validate"
+	min=min 
+	max=max 
+	step=step
+	class=inputClasses
 }}
 
 {{#if label}}
 	<label for="{{computedInputId}}">{{label}}</label>
 {{/if}}
 
-<span class="helper-text" data-error=dataError data-success=dataSuccess>
-	{{#if hasHelpText}}
-		{{helpText}}
-	{{/if}}
-</span>
+{{#if hasHelpText}}
+	{{materialize/input-field-helper-text
+		helpText=helpText
+		successMessage=successMessage
+		errorMessage=errorMessage
+	}}
+{{/if}}

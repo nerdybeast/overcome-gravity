@@ -1,37 +1,46 @@
-<div class="row">
+<div class="row {{if isCompact "no-bottom-padding"}}">
 	<div class="col s12 input-field">
-		{{#if max.isNew}}
-			{{input id="max-name-input" value=max.name}}
-		{{else}}
-			{{input id="max-name-input" value=max.name disabled="disabled"}}
-		{{/if}}
-		<label for="max-name-input">Enter Lift Name</label>
-	</div>
-	<div class="col s12 input-field">
-		{{input id="max-weight-input" type="number" value=weight}}
-		<label for="max-weight-input">Weight</label>
+		{{materialize/input-field 
+			value=max.name
+			label="Enter Lift Name"
+			triggerValidation=triggerNameValidation
+			hasError=nameHasError
+			errorMessage=nameErrorMessage
+			onChange=(action "maxLiftNameChange")
+		}}
 	</div>
 </div>
 
-<div class="row">
-	<div class="col">
-		<label for="weight-kg">
-			<input name="weight-type" type="radio" id="weight-kg" value="kg" checked />
-			<span>KG</span>
-		</label>
-	</div>
-	<div class="col">
-		<label for="weight-lbs">
-			<input name="weight-type" type="radio" id="weight-lbs" value="lbs" />
-			<span>LBS</span>
-		</label>
-	</div>
-</div>
+{{materialize/weight-input weight=weight weightType=weightType onWeightChange=(action "maxLiftWeightChange")}}
 
 <div class="row"></div>
 
-<div class="row">
-	<div class="col s12">
-		<button {{action "maxFormSubmit"}} class="btn-large full-width">Save</button>
+{{#if isCompact}}
+
+	<div class="row no-bottom-padding">
+		<div class="right">
+			<button {{action onCancel}} class="btn grey darker-1">Cancel</button>
+			{{#if max.isNew}}
+				<button {{action "maxFormSubmit"}} class="btn">Save</button>
+			{{else}}
+				<button {{action "maxFormSubmit"}} class="btn">Update</button>
+			{{/if}}
+		</div>
 	</div>
-</div>
+
+{{else}}
+
+	<div class="row">
+		<div class="col s6">
+			<button {{action onCancel}} class="btn-large grey darker-1 full-width">Cancel</button>
+		</div>
+		<div class="col s6">
+			{{#if max.isNew}}
+				<button {{action "maxFormSubmit"}} class="btn-large full-width">Save</button>
+			{{else}}
+				<button {{action "maxFormSubmit"}} class="btn-large full-width">Update</button>
+			{{/if}}
+		</div>
+	</div>
+
+{{/if}}

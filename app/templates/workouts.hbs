@@ -1,15 +1,53 @@
-{{#each model as |workout|}}
+{{page-heading title="Workouts"}}
 
-	<div class="card">
-		<div class="row">
-			<div class="col s12">{{workout.name}}</div>
+{{#if savedWorkouts}}
+	{{#each savedWorkouts as |workout|}}
+
+		{{!-- "clickable" is required for safari and some mobile browsers because "non-clickable" elements like a div
+		do not trigger click events even if an action has been specified on it. --}}
+
+		<div class="card clickable" {{action "goToWorkout" workout.id}}>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12">
+						<div class="card-title" style="margin-bottom:12px;">
+							{{workout.name}}
+						</div>
+					</div>
+					<div class="col s12">
+						Exercises ({{workout.exercises.length}})
+					</div>
+					<div class="col s12">
+						<div class="divider" style="margin-top:5px;"></div>
+					</div>
+				</div>
+				<div class="row">
+					{{#each workout.exercises as |exercise|}}
+						<div class="col s12">
+							{{exercise.name}}
+						</div>
+					{{/each}}
+				</div>
+				{{!-- <div style="position:relative; height:10px;">
+					<div class="fixed-action-btn" style="position:absolute; bottom:-10px; right:-10px;">
+						<a class="btn-floating red">
+							<i class="large material-icons">more_vert</i>
+						</a>
+						<ul>
+							<li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+							<li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+							<li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+							<li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+						</ul>
+					</div>
+				</div> --}}
+			</div>
 		</div>
-	</div>
-
-{{/each}}
+	{{/each}}
+{{/if}}
 
 <div class="row">
-	{{#link-to "workout" "new" class="btn-large full-width"}}
+	{{#link-to "workout" "new" (query-params workoutClientId=null mode="edit") class="btn-large full-width"}}
 		ADD NEW WORKOUT
 	{{/link-to}}
 </div>

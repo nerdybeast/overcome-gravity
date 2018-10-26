@@ -11,6 +11,8 @@ Router.map(function() {
   this.route('maxes', function() {});
   this.route('workouts');
   this.route('workout', { path: '/workout/:workout_id' });
+  this.route('set', { path: '/set/:set_id' });
+  this.route('exercise', { path: '/exercise/:exercise_id' });
 });
 
 export default Router;

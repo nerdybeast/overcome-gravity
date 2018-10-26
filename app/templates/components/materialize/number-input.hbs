@@ -1,0 +1,22 @@
+<table class="number-input">
+	<tr>
+		<td>
+			{{materialize/input-field
+				type="number"
+				label=label
+				value=value
+				min=min
+				max=max
+				step=step
+			}}
+		</td>
+		<td>
+			<button {{action "increaseCount"}} class="btn-small">
+				<i class="material-icons">keyboard_arrow_up</i>
+			</button>
+			<button {{action "decreaseCount"}} class="btn-small">
+				<i class="material-icons">keyboard_arrow_down</i>
+			</button>
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,6 @@
+<select id="{{selectInputId}}" class="{{iconsClass}} {{multipleClass}}" disabled={{disabled}}>
+	{{#each options as |opt|}}
+		{{materialize/select-input-option option=opt}}
+	{{/each}}
+</select>
+<label>{{label}}</label>

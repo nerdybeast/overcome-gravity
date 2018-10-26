@@ -1,0 +1,70 @@
+<div class="row">
+	<div class="col s12">
+		{{materialize/input-field
+			id="workout-name-input"
+			label="Workout Name (optional)"
+			placeholder=defaultWorkoutName
+			value=workout.name
+		}}
+	</div>
+</div>
+
+{{#each workout.exercises as |exercise|}}
+	<div class="row">
+		<div class="divider"></div>
+	</div>
+	{{!-- "goToSetRoute" is found on the workout.js controller --}}
+	{{exercise-form exercise=exercise maxes=maxes goToSetRoute=(action goToSetRoute)}}
+{{/each}}
+
+{{#if workout.exercises}}
+	<div class="row">
+		<div class="divider"></div>
+	</div>
+{{/if}}
+
+<div class="row">
+	<div class="col s12">
+		<button {{action "addExercise" "new"}} class="btn-large full-width">
+			ADD EXERCISE
+		</button>
+	</div>
+</div>
+<div class="row">
+	<div class="col s6">
+		<button {{action "cancelWorkoutConfirm"}} class="btn-large full-width grey darker-1">
+			CANCEL
+		</button>
+	</div>
+	<div class="col s6">
+		<button {{action "saveWorkout"}} class="btn-large full-width blue darken-1">
+			SAVE
+		</button>
+	</div>
+</div>
+
+{{outlet}}
+
+<!--
+<div id="{{!newExerciseModalId}}" class="modal">
+	<div class="modal-content">
+		{{!new-exercise-form defaultExerciseName=defaultExerciseName maxes=maxes onSave=(action "addNewExercise") onCancel=(action "cancelExercise")}}
+	</div>
+</div>
+-->
+
+<div id="{{cancelWorkoutModalId}}" class="modal">
+	<div class="modal-content valign-wrapper center-align">
+		<h6>
+			You have unsaved changes, are you sure you want to continue?
+		</h6>
+	</div>
+	<div class="modal-footer">
+		<button {{action "abortCancel"}} class="btn grey darker-1">
+			<span style="margin: 0px 10px;">NO</span>
+		</button>
+		<button {{action onCancelWorkout}} class="btn">
+			<span style="margin: 0px 10px;">YES</span>
+		</button>
+	</div>
+</div>

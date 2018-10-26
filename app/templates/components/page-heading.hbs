@@ -1,5 +1,13 @@
-<h4 class="blue-grey-text">{{title}}</h4>
-<div class="divider"></div>
-<h4></h4>
+<div class="valign-wrapper">
+	<div class="full-width">
+		<span class="blue-grey-text" style="font-size:2em;">{{title}}</span>
+	</div>
+	{{yield}}
+</div>
 
-{{yield}}
+<div class="divider"></div>
+
+{{!-- Just a way to provide a consistent margin for the content below this heading --}}
+{{#if bottomMargin}}
+	<div class="row"></div>
+{{/if}}

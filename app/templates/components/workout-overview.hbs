@@ -1,0 +1,46 @@
+{{#each workout.exercises as |exercise|}}
+
+	<div class="no-fluff">
+		<div class="row title">
+			<div class="col s12">
+				<span>{{exercise.name}}</span>
+			</div>
+			<div class="col s12">
+				<div class="divider"></div>
+			</div>
+		</div>
+		<div class="row header">
+			<div class="col s4 center">
+				Reps
+			</div>
+			<div class="col s4 center">
+				KG
+			</div>
+			<div class="col s4 center">
+				Repeat
+			</div>
+		</div>
+		{{#each exercise.sets as |theSet|}}
+			<div class="row body">
+				<div class="col s4 center">
+					<span>{{theSet.reps}}</span>
+				</div>
+				<div class="col s4 center">
+					<span>
+						{{theSet.weight.kg}}
+						{{#if theSet.isPercentBasedSet}}
+							<span style="font-size:.5em;">
+								({{theSet.percent}}%)
+							</span>
+						{{/if}}
+					</span>
+				</div>
+				<div class="col s4 center">
+					<span>{{theSet.repeatCount}}</span>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+
+
+{{/each}}

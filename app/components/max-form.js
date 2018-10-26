@@ -1,21 +1,58 @@
 import Component from '@ember/component';
 import { inject as service } from "@ember/service";
 import M from 'materialize-css';
-import constants from 'overcome-gravity/utils/constants';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
+import { isBlank } from '@ember/utils';
+import { reject, resolve, hashSettled } from 'rsvp';
 
 export default Component.extend(ComponentValidateMixin, {
 
-	max: null,
-
-	init() {
-		this._super(...arguments);
-		this.validateArguments('max-form', ['max']);
-	},
-
 	store: service('store'),
 
-	weight: null,
+	max: null,
+	isCompact: false,
+	onSave: null,
+	onComplete: null,
+	onCancel: null,
+
+	init() {
+
+		this._super(...arguments);
+		this.validateArguments('max-form', ['max', 'onSave', 'onComplete', 'onCancel']);
+
+		const currentMax = this.get('max');
+		this.set('maxes', this.get('store').peekAll('max').rejectBy('clientId', currentMax.get('clientId')));
+	},
+
+	maxes: null,
+
+	//Bound to the weight number input
+	// weight: null,
+
+	//Set to whatever weight type option the user selects
+	//NOTE: This is not bound to those radio buttons, this is set manually
+	weightType: 'kg',
+
+	triggerNameValidation: 0,
+	nameHasError: false,
+	nameErrorMessage: null,
+
+	validateFieldHasValue(val) {
+		if(isBlank(val)) return reject('A value is required.');
+		return resolve();
+	},
+
+	willInsertElement() {
+
+		//TODO: Get from user's preferences...
+		// const isKG = this.get('isKG');
+		const isKG = true;
+
+		const max = this.get('max');
+
+		// this.set('weight', isKG ? max.get('kg') : max.get('lbs'));
+		this.set('weight', isKG ? max.get('kg') : max.get('lbs'));
+	},
 
 	didInsertElement() {
 
@@ -24,6 +61,7 @@ export default Component.extend(ComponentValidateMixin, {
 		if(!this.get('max.isNew')) {
 			M.updateTextFields();
 		}
+
 	},
 
 	willDestroyElement() {
@@ -31,30 +69,59 @@ export default Component.extend(ComponentValidateMixin, {
 		const max = this.get('max');
 
 		if(max.get('isNew')) {
-			this.get('store').unloadRecord(max);
+
+			//TODO: Warn the user about unsaved changes...
+			max.rollbackAttributes();
 		}
 	},
 
 	actions: {
 
+		weightTypeChange(weightType) {
+			this.set('weightType', weightType);
+		},
+
+		maxLiftNameChange(val) {
+			
+			const maxName = (val || '').toLowerCase();
+			const existingMaxNames = this.get('maxes').map(max => max.get('name').toLowerCase());
+			
+			if(existingMaxNames.includes(maxName)) {
+
+				this.setProperties({
+					nameHasError: true,
+					nameErrorMessage: `A max with the name "${val}" already exists.`
+				});
+
+			}
+
+			this.setProperties({
+				nameHasError: false,
+				nameErrorMessage: null
+			});
+		},
+
 		maxFormSubmit() {
 		
-			const enteredWeight = Number(this.weight || 0);
-		
-			const elems = Array.from(document.getElementsByName('weight-type'));
-			const weightType = (elems.findBy('checked', true) || { value: undefined }).value;
-			const isKG = weightType === 'kg';
-		
-			const kgWeight = isKG ? enteredWeight : Math.round(enteredWeight / constants.conversion);
-			const lbsWeight = !isKG ? enteredWeight : Math.round(enteredWeight * constants.conversion);
-		
-			this.get('max').setProperties({
-				kg: kgWeight,
-				lbs: lbsWeight
+			const max = this.get('max');
+			const name = this.validateFieldHasValue(max.get('name'));
+			const weight = this.validateFieldHasValue(this.get('weight'));
+
+			hashSettled({ name, weight }).then(res => {
+
+				if(res.name.state === 'rejected') this.incrementProperty('triggerNameValidation');
+				if(res.weight.state === 'rejected') this.incrementProperty('triggerWeightValidation');
+
+				if(Object.keys(res).every(key => res[key].state === 'fulfilled')) {
+					console.info('Max Lift form validated!');
+					this.get('onSave')(max).then(() => this.get('onComplete')());
+				}
+
 			});
-		
-			//console.info(this.max);
+		},
+
+		maxLiftWeightChange({ kg, lbs }) {
+			this.get('max').setProperties({ kg, lbs });
 		}
-	
 	}
 });

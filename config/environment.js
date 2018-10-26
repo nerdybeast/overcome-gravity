@@ -20,6 +20,11 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+
+    //https://github.com/thaume/ember-cli-uuid
+    'ember-cli-uuid': {
+      defaultUUID: false
     }
   };
 
@@ -46,6 +51,10 @@ module.exports = function(environment) {
   if (environment === 'production') {
     // here you can enable a production-specific feature
   }
+
+  //TODO: Config this with dotenv...
+  // ENV.OG_API_DOMAIN = 'https://cd93a9b8.ngrok.io';
+  ENV.OG_API_DOMAIN = 'http://localhost:3000';
 
   return ENV;
 };

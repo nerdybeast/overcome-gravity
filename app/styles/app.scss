@@ -1,0 +1,103 @@
+//This works because we included 'node_modules/materialize-css/sass' in the sassOptions
+//in the ember-cli-build.js file.
+//@import "materialize";
+
+body > .ember-view {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
+.full-width {
+	width: 100%;
+}
+
+table.number-input {
+	tr {
+		border: none;
+		td:first-child {
+			padding: 0px 5px 0px 0px;
+		}
+		td:last-child {
+			padding: 0px;
+			width: 102px;
+		}
+	}
+}
+
+table.max-input {
+	tr {
+		border: none;
+		td:first-child {
+			padding: 0px 5px 0px 0px;
+			width: 100%;
+		}
+		td:last-child {
+			padding: 0px;
+			button {
+				position: relative;
+				top: 5px;
+			}
+		}
+	}
+}
+
+table.select-input {
+	tr {
+		border: none;
+		td:first-child {
+			padding: 0px 5px 0px 0px;
+		}
+		td:last-child {
+			padding: 0px;
+		}
+	}
+}
+
+.modal-footer {
+	//row adds a margin-bottom that makes the whole modal scroll which doesn't look good
+	.row {
+		margin: 0px;
+	}
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.no-fluff {
+	margin-bottom: 15px;
+	.row.title {
+		margin-bottom: 5px;
+		.col:first-child {
+			span {
+				font-size: 1.5em;
+			}
+		}
+		.col {
+			padding: 0px;
+			.divider {
+				margin-top: 2px;
+			}
+		}
+	}
+	.row.header {
+		margin-bottom: 5px;
+	}
+	.row.body {
+		margin-bottom: 0px;
+		.col {
+			span {
+				font-size: 1.5em;
+			}
+		}
+	}
+}
+
+.no-bottom-padding {
+	margin-bottom: 0px;
+}

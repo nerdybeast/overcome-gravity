@@ -1,0 +1,52 @@
+{{page-heading title="New Exercise"}}
+
+<div class="row">
+	<div class="col s12">
+		{{materialize/input-field
+			id="exercise-name"
+			label="Exercise Name (optional)"
+			value=exerciseName
+			placeholder=defaultExerciseName
+		}}
+	</div>
+</div>
+
+{{#materialize/radio-input inputName="workout-type" onChange=(action (mut exerciseType))}}
+	<div class="row">
+		<div class="col s6">
+			<label for="workout-type-percent">
+				<input name="workout-type" type="radio" id="workout-type-percent" value="percent" checked />
+				<span>Percent</span>
+			</label>
+		</div>
+		<div class="col s6">
+			<label for="workout-type-standard">
+				<input name="workout-type" type="radio" id="workout-type-standard" value="standard" />
+				<span>Standard</span>
+			</label>
+		</div>
+	</div>
+{{/materialize/radio-input}}
+
+{{#if isPercentBasedExercise}}
+	<div class="row">
+		<div class="col s12">
+			{{max-lift-input
+				maxes=maxes
+				defaultMaxClientId=selectedMaxClientId
+				onChange=(action "maxLiftChange")
+			}}
+		</div>
+	</div>
+{{/if}}
+
+<div class="row"></div>
+
+<div class="row">
+	<div class="col s6">
+		<button {{action "cancel"}} class="btn-large grey darken-1 full-width">Cancel</button>
+	</div>
+	<div class="col s6">
+		<button {{action "saveNewExercise"}} class="btn-large full-width">Save</button>
+	</div>
+</div>
