@@ -51,9 +51,6 @@ export default Component.extend(mixin, {
 		const elem = this.getSelectElement();
 		M.FormSelect.init(elem);
 
-		//const instance = M.FormSelect.getInstance(elem);
-		//this.setCurrentValue(instance.getSelectedValues()[0]);
-
 		elem.addEventListener('change', this.onSelectChange.bind(this));
 	},
 
@@ -85,8 +82,6 @@ export default Component.extend(mixin, {
 
 	//Called when the component has updated and rerendered itself. Called only during a rerender, not during an initial render.
 	didUpdate() {
-
-
 
 		//Because there is no "update" for the materialize select component we need to do it manually after our component has rerendered
 		//and the dom has been updated.

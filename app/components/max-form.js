@@ -48,30 +48,26 @@ export default Component.extend(ComponentValidateMixin, {
 		// const isKG = this.get('isKG');
 		const isKG = true;
 
-		const max = this.get('max');
-
 		// this.set('weight', isKG ? max.get('kg') : max.get('lbs'));
-		this.set('weight', isKG ? max.get('kg') : max.get('lbs'));
+		this.set('weight', isKG ? this.max.get('kg') : this.max.get('lbs'));
 	},
 
 	didInsertElement() {
 
 		//If this component was rendered with a max already set, we need to update the Materialize input fields
 		//to push the placeholder above the input so they don't run on top of the input value.
-		if(!this.get('max.isNew')) {
+		if(!this.max.get('isNew')) {
 			M.updateTextFields();
 		}
 
 	},
 
 	willDestroyElement() {
-		
-		const max = this.get('max');
 
-		if(max.get('isNew')) {
+		if(this.max.get('isNew')) {
 
 			//TODO: Warn the user about unsaved changes...
-			max.rollbackAttributes();
+			this.max.rollbackAttributes();
 		}
 	},
 
@@ -84,7 +80,7 @@ export default Component.extend(ComponentValidateMixin, {
 		maxLiftNameChange(val) {
 			
 			const maxName = (val || '').toLowerCase();
-			const existingMaxNames = this.get('maxes').map(max => max.get('name').toLowerCase());
+			const existingMaxNames = this.maxes.map(max => max.get('name').toLowerCase());
 			
 			if(existingMaxNames.includes(maxName)) {
 
@@ -113,7 +109,6 @@ export default Component.extend(ComponentValidateMixin, {
 				if(res.weight.state === 'rejected') this.incrementProperty('triggerWeightValidation');
 
 				if(Object.keys(res).every(key => res[key].state === 'fulfilled')) {
-					console.info('Max Lift form validated!');
 					this.get('onSave')(max).then(() => this.get('onComplete')());
 				}
 

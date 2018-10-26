@@ -14,17 +14,16 @@ export default Component.extend(ComponentValidateMixin, {
 	weightType: 'kg',
 
 	//passed functions
-	onSave: null,
-	onCancel: null,
+	saveSet: null,
+	updateSet: null,
+	cancelSet: null,
 
 	init() {
 		this._super(...arguments);
 		this.validateArguments('set-form', ['exerciseSet', 'maxes']);
 
-		const exerciseSet = this.get('exerciseSet');
-
-		if(exerciseSet !== null && this.get('activeMaxId') === null) {
-			this.set('activeMaxId', exerciseSet.get('max.id') || null);
+		if(this.exerciseSet !== null && this.get('activeMaxId') === null) {
+			this.set('activeMaxId', this.exerciseSet.get('max.id') || null);
 		}
 	},
 
@@ -32,53 +31,45 @@ export default Component.extend(ComponentValidateMixin, {
 	max: alias('exercise.max'),
 
 	maxAlreadyDetermined: computed('max', function() {
-		return !isBlank(this.get('max'));
+		return !isBlank(this.max);
 	}),
 
 	isPercent: equal('exercise.type', 'percent'),
 
 	weight: computed('isPercent', 'max', 'exerciseSet', 'weightType', function() {
 
-		const isPercent = this.get('isPercent');
-		const weightType = this.get('weightType');
-
-		if(isPercent) {
+		if(this.isPercent) {
 			//TODO: Need to pull kg or lbs based on the user's preference...
-			return this.get(`max.${weightType}`);
+			return this.max.get(this.weightType);
 		}
 
-		return this.get(`exerciseSet.${weightType}`) || 0;
+		return this.exerciseSet.get(this.weightType) || 0;
 	}),
 
 	maxesOptions: computed('maxes.[]', 'activeMaxId', 'maxAlreadyDetermined', function() {
 
-		const activeMaxId = this.get('activeMaxId');
-		const maxAlreadyDetermined = this.get('maxAlreadyDetermined');
-
-		if(maxAlreadyDetermined) {
-
-			const max = this.get('max');
+		if(this.maxAlreadyDetermined) {
 
 			return [SelectInputOption.create({
-				value: max.get('id'),
-				label: max.get('name'),
+				value: this.max.get('id'),
+				label: this.max.get('name'),
 				selected: true,
 				disabled: true
 			})];
 		}
 
-		const maxes = this.get('maxes').map(max => {
+		const maxes = this.maxes.map(max => {
 			return SelectInputOption.create({
 				value: max.id,
 				label: max.name,
-				selected: max.id === activeMaxId
+				selected: max.id === this.activeMaxId
 			});
 		});
 
 		const readOnlyOption = SelectInputOption.create({
 			label: 'Choose a max',
 			disabled: true,
-			selected: activeMaxId === null
+			selected: this.activeMaxId === null
 		});
 
 		return [readOnlyOption, ...maxes];
@@ -87,7 +78,6 @@ export default Component.extend(ComponentValidateMixin, {
 	isValid() {
 
 		const errors = [];
-		//const theSet = this.get('exerciseSet');
 
 		if(isBlank(this.exerciseSet.get('reps'))) {
 			errors.push('Please enter the number of reps.');
@@ -105,7 +95,7 @@ export default Component.extend(ComponentValidateMixin, {
 
 		} else {
 
-			if(isBlank(this.get('weight'))) {
+			if(isBlank(this.weight)) {
 				errors.push('Please enter the weight.');
 			}
 		}
@@ -127,43 +117,39 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	setWeight(kg, lbs) {
-		this.get('exerciseSet').setProperties({ kg, lbs });
+		this.exerciseSet.setProperties({ kg, lbs });
 	},
 
 	actions: {
 
 		changeMaxOnSet(maxId) {
-			const exerciseSet = this.get('exerciseSet');
-			exerciseSet.set('max', this.get('maxes').findBy('id', maxId));
+			this.exerciseSet.set('max', this.get('maxes').findBy('id', maxId));
 		},
 
 		onSaveSet() {
 
 			if(this.isValid()) {
 
-				const exercise = this.get('exercise');
-				const exerciseSet = this.get('exerciseSet');
-
-				if((isBlank(exerciseSet.get('kg')) || isBlank(exerciseSet.get('lbs'))) && this.get('weight') === 0) {
+				if((isBlank(this.exerciseSet.get('kg')) || isBlank(this.exerciseSet.get('lbs'))) && this.weight === 0) {
 					this.setWeight(0, 0);
 				}
 
-				if(exerciseSet.get('type') !== exercise.get('type')) {
-					exerciseSet.set('type', exercise.get('type'));
+				if(this.exerciseSet.get('type') !== this.exercise.get('type')) {
+					this.exerciseSet.set('type', this.exercise.get('type'));
 				}
 
-				this.get('saveSet')();
+				this.saveSet();
 			}
 		},
 
 		onUpdateSet() {
 			if(this.isValid()) {
-				this.get('updateSet')();
+				this.updateSet();
 			}
 		},
 
 		onCancelSet() {
-			this.get('cancelSet')();
+			this.cancelSet();
 		},
 
 		weightChange({ kg, lbs }) {

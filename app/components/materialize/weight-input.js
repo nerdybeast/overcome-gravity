@@ -3,7 +3,6 @@ import { equal } from '@ember/object/computed';
 import { observer } from '@ember/object';
 import constants from 'overcome-gravity/utils/constants';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
-import { debug } from '@ember/debug';
 
 export default Component.extend(ComponentValidateMixin, {
 
@@ -31,15 +30,16 @@ export default Component.extend(ComponentValidateMixin, {
 			lbs = !isKG ? weight : Math.round(weight * constants.conversion);
 		}
 
-		this.get('onWeightChange')({ kg, lbs });
+		this.onWeightChange({ kg, lbs });
 	}),
 
 	actions: {
 
 		weightTypeChange(weightType) {
-			debug(`Weight type changed to => ${weightType}`);
-			
+
 			this.set('weightType', weightType);
+
+			//Only calling this to make sure the computed property will be updated.
 			this.get('isKG');
 		}
 

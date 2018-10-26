@@ -2,7 +2,11 @@
 
 <div class="row" style="margin-bottom:0px;">
 	<div class="col s12">
-		{{materialize/input-field label="Exercise Name" value=exercise.name data-attr="disabled"}}
+		{{materialize/input-field 
+			label="Exercise Name" 
+			value=exercise.name 
+			data-attr="disabled"
+		}}
 	</div>
 </div>
 
@@ -50,34 +54,5 @@
 			<i class="material-icons left">add</i>
 			SET
 		</button>
-		<!--
-		{{!#link-to "set" "new" (query-params exerciseId=exerciseSet.id) tagName="button" class="btn-small right"}}
-			<i class="material-icons left">add</i>
-			SET
-		{{!/link-to}}
-		-->
-	</div>
-</div>
-
-<div id="{{modalId}}" class="modal">
-	<div class="modal-content">
-		{{#if setModel}}
-			{{set-form
-				exerciseSet=setModel
-				maxes=maxes
-			}}
-		{{/if}}
-	</div>
-	<div class="modal-footer">
-		<div class="row">
-			<div class="col s12">
-				<button {{action "cancelSet" setModel}} class="btn grey darken-1">Cancel</button>
-				{{#if setModel.isNew}}
-					<button {{action "saveSet" setModel}} class="btn">Save</button>
-				{{else}}
-					<button {{action "updateSet" setModel}} class="btn">Update</button>
-				{{/if}}
-			</div>
-		</div>
 	</div>
 </div>

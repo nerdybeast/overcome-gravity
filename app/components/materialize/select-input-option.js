@@ -2,8 +2,6 @@ import Component from '@ember/component';
 import EmberError from '@ember/error';
 import SelectInputOptionModel from 'overcome-gravity/models/objects/select-input-option';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
-//import { computed } from '@ember/object';
-//import { alias } from '@ember/object/computed';
 
 export default Component.extend(ComponentValidateMixin, {
 

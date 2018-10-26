@@ -41,10 +41,10 @@ export default Route.extend({
 				clientId,
 				order: previousSet.get('order') || 1,
 				reps: previousSet.get('reps') || 1,
-				type: exercise.get('type'),
 				percent: previousSet.get('percent') || 50,
 				repeatCount: previousSet.get('repeatCount') || 1,
-				//max: previousSet.get('max'),
+				kg: previousSet.get('kg') || 0,
+				lbs: previousSet.get('lbs') || 0,
 				exercise
 			});
 

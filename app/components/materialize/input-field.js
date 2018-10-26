@@ -110,11 +110,10 @@ export default Component.extend({
 		}
 
 		this.set('previousValue', value);
-		const onChangeFn = this.get('onChange');
 
-		if(onChangeFn === null || typeof onChangeFn !== 'function') return;
+		if(this.onChange === null || typeof this.onChange !== 'function') return;
 
-		onChangeFn(value)/*.then(successMessage => {
+		this.onChange(value);/*.then(successMessage => {
 
 			if(!successMessage) {
 				this.clearValidationState();

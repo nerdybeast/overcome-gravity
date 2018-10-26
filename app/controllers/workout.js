@@ -14,13 +14,12 @@ export default Controller.extend({
 	workouts: null,
 
 	pageTitle: computed('workout.isNew', function() {
-		return this.get('workout.isNew') ? 'Create Workout' : 'Edit Workout';
+		return this.workout.get('isNew') ? 'Create Workout' : 'Edit Workout';
 	}),
 
 	isEditing: equal('mode', 'edit'),
 
 	defaultWorkoutName: computed('workouts.[]', function() {
-		// const workouts = this.get('store').peekAll('workout');
 		const numberOfDefaultWOrkouts = this.workouts.filter(workout => workout.getWithDefault('name', '').toLowerCase().startsWith('workout ')).length;
 		return `Workout ${numberOfDefaultWOrkouts + 1}`;
 	}),
@@ -39,9 +38,10 @@ export default Controller.extend({
 			});
 		},
 
-		goToExerciseRoute(exerciseId, exerciseClientId, workoutClientId) {
+		goToExerciseRoute(exerciseId, exerciseClientId/*, workoutClientId*/) {
 
 			exerciseId = exerciseId || 'unsaved';
+			const workoutClientId = this.workout.get('clientId');
 
 			this.transitionToRoute('exercise', exerciseId, {
 				queryParams: {
@@ -53,10 +53,9 @@ export default Controller.extend({
 
 		saveWorkout() {
 
-			const workout = this.get('workout');
-			const exercises = workout.get('exercises');
+			const exercises = this.workout.get('exercises');
 
-			const workoutPromise = workout.get('hasDirtyAttributes') ? workout.save() : resolve(workout);
+			const workoutPromise = this.workout.get('hasDirtyAttributes') ? this.workout.save() : resolve(this.workout);
 
 			workoutPromise.then(() => {
 
@@ -88,14 +87,22 @@ export default Controller.extend({
 
 		cancelWorkoutCreation() {
 
-			const workout = this.get('workout');
+			const sets = [];
+			const exercises = [];
 
-			workout.get('exercises').forEach(exercise => {
-				exercise.get('sets').forEach(theSet => theSet.rollbackAttributes());
-				exercise.rollbackAttributes();
+			this.workout.get('exercises').forEach(exercise => {
+
+				exercise.get('sets').forEach(theSet => {
+					sets.push(theSet);
+				});
+
+				exercises.push(exercise);
 			});
 
-			workout.rollbackAttributes();
+			sets.forEach(theSet => theSet.rollbackAttributes());
+			exercises.forEach(exercise => exercise.rollbackAttributes());
+			this.workout.rollbackAttributes();
+
 			this.transitionToRoute('workouts');
 		}
 	}

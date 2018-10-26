@@ -25,6 +25,17 @@ export default Controller.extend({
 		}, 0);
 	}),
 
+	transitionToWorkoutRoute() {
+
+		const workoutId = this.workout.get('id') || 'new';
+
+		this.transitionToRoute('workout', workoutId, {
+			queryParams: {
+				workoutClientId: this.workout.get('clientId')
+			}
+		});
+	},
+
 	actions: {
 
 		addNewExercise(exerciseName, exerciseType, max) {
@@ -42,17 +53,11 @@ export default Controller.extend({
 			});
 
 			this.workout.get('exercises').pushObject(newExercise);
-			const workoutId = this.workout.get('id') || 'new';
-
-			this.transitionToRoute('workout', workoutId, {
-				queryParams: {
-					workoutClientId: this.workout.get('clientId')
-				}
-			});
+			this.transitionToWorkoutRoute();
 		},
 
 		cancelExercise() {
-
+			this.transitionToWorkoutRoute();
 		},
 
 		addNewMax(max) {

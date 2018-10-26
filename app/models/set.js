@@ -10,11 +10,7 @@ export default DS.Model.extend({
 	repeatCount: DS.attr('string'),
 	kg: DS.attr('number'),
 	lbs: DS.attr('number'),
-	
-	//Moved up to the exercise level
-	//type: DS.attr('string'),
-	//max: DS.belongsTo('max'),
-	
+
 	exercise: DS.belongsTo('exercise'),
 
 	max: alias('exercise.max'),

@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { alias, filterBy } from '@ember/object/computed';
-// import M from 'materialize-css';
 
 export default Controller.extend({
 	workouts: alias('model'),
@@ -14,9 +13,5 @@ export default Controller.extend({
 				}
 			});
 		}
-	},
-	didInsertElement() {
-		// const elems = document.querySelectorAll('.fixed-action-btn');
-		// M.FloatingActionButton.init(elems);
 	}
 });

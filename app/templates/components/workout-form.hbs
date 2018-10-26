@@ -14,7 +14,11 @@
 		<div class="divider"></div>
 	</div>
 	{{!-- "goToSetRoute" is found on the workout.js controller --}}
-	{{exercise-form exercise=exercise maxes=maxes goToSetRoute=(action goToSetRoute)}}
+	{{exercise-form 
+		exercise=exercise 
+		maxes=maxes 
+		goToSetRoute=(action goToSetRoute)
+	}}
 {{/each}}
 
 {{#if workout.exercises}}
@@ -44,14 +48,6 @@
 </div>
 
 {{outlet}}
-
-<!--
-<div id="{{!newExerciseModalId}}" class="modal">
-	<div class="modal-content">
-		{{!new-exercise-form defaultExerciseName=defaultExerciseName maxes=maxes onSave=(action "addNewExercise") onCancel=(action "cancelExercise")}}
-	</div>
-</div>
--->
 
 <div id="{{cancelWorkoutModalId}}" class="modal">
 	<div class="modal-content valign-wrapper center-align">

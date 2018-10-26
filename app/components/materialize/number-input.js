@@ -8,6 +8,7 @@ export default Component.extend({
 	min: null,
 	max: null,
 	step: 1,
+	onChange: null,
 
 	init() {
 
@@ -33,9 +34,8 @@ export default Component.extend({
 	},
 
 	notifyOfChange() {
-		const onChange = this.get('onChange');
-		if(typeof onChange === 'function') {
-			onChange(this.get('value'));
+		if(typeof this.onChange === 'function') {
+			this.onChange(this.get('value'));
 		}
 	}
 

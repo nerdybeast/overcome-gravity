@@ -6,19 +6,16 @@ export default Component.extend({
 	onChange: null,
 
 	getRadioButtonElements() {
-		const inputName = this.get('inputName');
-		return Array.from(document.getElementsByName(inputName));
+		return Array.from(document.getElementsByName(this.inputName));
 	},
 
 	onValueChange(e) {
 
-		const onChangeFn = this.get('onChange');
-
-		if(!onChangeFn || typeof onChangeFn !== 'function') {
+		if(!this.onChange || typeof this.onChange !== 'function') {
 			return;
 		}
 
-		onChangeFn(e.target.value);
+		this.onChange(e.target.value);
 	},
 
 	didInsertElement() {

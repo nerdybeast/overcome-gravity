@@ -1,8 +1,6 @@
-import Ember from 'ember';
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
-import { resolve } from 'rsvp';
 import { isBlank } from '@ember/utils';
 
 export default Controller.extend({
