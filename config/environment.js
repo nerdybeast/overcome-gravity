@@ -52,9 +52,7 @@ module.exports = function(environment) {
     // here you can enable a production-specific feature
   }
 
-  //TODO: Config this with dotenv...
-  // ENV.OG_API_DOMAIN = 'https://cd93a9b8.ngrok.io';
-  ENV.OG_API_DOMAIN = 'http://localhost:3000';
+  ENV.OVERCOME_GRAVITY_API = process.env.OVERCOME_GRAVITY_API;
 
   return ENV;
 };
