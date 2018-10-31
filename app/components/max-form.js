@@ -3,7 +3,8 @@ import { inject as service } from "@ember/service";
 import M from 'materialize-css';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { isBlank } from '@ember/utils';
-import { reject, resolve, hashSettled } from 'rsvp';
+import { reject, resolve } from 'rsvp';
+import { task } from 'ember-concurrency';
 
 export default Component.extend(ComponentValidateMixin, {
 
@@ -20,14 +21,10 @@ export default Component.extend(ComponentValidateMixin, {
 		this._super(...arguments);
 		this.validateArguments('max-form', ['max', 'onSave', 'onComplete', 'onCancel']);
 
-		const currentMax = this.get('max');
-		this.set('maxes', this.get('store').peekAll('max').rejectBy('clientId', currentMax.get('clientId')));
+		this.set('maxes', this.get('store').peekAll('max').rejectBy('clientId', this.max.get('clientId')));
 	},
 
 	maxes: null,
-
-	//Bound to the weight number input
-	// weight: null,
 
 	//Set to whatever weight type option the user selects
 	//NOTE: This is not bound to those radio buttons, this is set manually
@@ -45,11 +42,11 @@ export default Component.extend(ComponentValidateMixin, {
 	willInsertElement() {
 
 		//TODO: Get from user's preferences...
-		// const isKG = this.get('isKG');
 		const isKG = true;
 
-		// this.set('weight', isKG ? max.get('kg') : max.get('lbs'));
-		this.set('weight', isKG ? this.max.get('kg') : this.max.get('lbs'));
+		const weight = isKG ? this.max.get('kg') : this.max.get('lbs');
+
+		this.set('weight', weight);
 	},
 
 	didInsertElement() {
@@ -71,6 +68,65 @@ export default Component.extend(ComponentValidateMixin, {
 		}
 	},
 
+	validateNameField(val) {
+
+		const maxName = (val || '').toLowerCase();
+		const existingMaxNames = this.maxes.map(max => max.get('name').toLowerCase());
+
+		let message = null;
+
+		if(isBlank(maxName)) {
+			message = 'Name is required';
+		} else if(existingMaxNames.includes(maxName)) {
+			message = `A max with the name "${val}" already exists.`;
+		}
+
+		const hasError = !isBlank(message);
+
+		return { hasError, message };
+	},
+
+	validateWeightField(val) {
+
+		const hasError = isBlank(val);
+		const message = hasError ? 'Weight is required' : null;
+
+		return { hasError, message };
+	},
+
+	saveMax: task(function * () {
+
+		try {
+
+			const max = this.get('max');
+			const validations = [];
+
+			const nameValidation = this.validateNameField(max.get('name'));
+			const weightValidation = this.validateWeightField(this.get('weight'));
+
+			validations.push(nameValidation);
+			validations.push(weightValidation);
+
+			this.setProperties({
+				nameHasError: nameValidation.hasError,
+				nameErrorMessage: nameValidation.message,
+				weightHasError: weightValidation.hasError,
+				weightErrorMessage: weightValidation.message
+			});
+
+			if(validations.any(x => x.hasError)) {
+				return;
+			}
+
+			yield this.onSave(max);
+			yield this.onComplete();
+
+		} catch(error) {
+			//TODO: Show error to user
+		}
+
+	}).drop(), //drop prevents firing this function if it's already running, i.e. prevents double button clicks
+
 	actions: {
 
 		weightTypeChange(weightType) {
@@ -78,40 +134,12 @@ export default Component.extend(ComponentValidateMixin, {
 		},
 
 		maxLiftNameChange(val) {
-			
-			const maxName = (val || '').toLowerCase();
-			const existingMaxNames = this.maxes.map(max => max.get('name').toLowerCase());
-			
-			if(existingMaxNames.includes(maxName)) {
 
-				this.setProperties({
-					nameHasError: true,
-					nameErrorMessage: `A max with the name "${val}" already exists.`
-				});
-
-			}
+			const { hasError, message } = this.validateNameField(val);
 
 			this.setProperties({
-				nameHasError: false,
-				nameErrorMessage: null
-			});
-		},
-
-		maxFormSubmit() {
-		
-			const max = this.get('max');
-			const name = this.validateFieldHasValue(max.get('name'));
-			const weight = this.validateFieldHasValue(this.get('weight'));
-
-			hashSettled({ name, weight }).then(res => {
-
-				if(res.name.state === 'rejected') this.incrementProperty('triggerNameValidation');
-				if(res.weight.state === 'rejected') this.incrementProperty('triggerWeightValidation');
-
-				if(Object.keys(res).every(key => res[key].state === 'fulfilled')) {
-					this.get('onSave')(max).then(() => this.get('onComplete')());
-				}
-
+				nameHasError: hasError,
+				nameErrorMessage: message
 			});
 		},
 

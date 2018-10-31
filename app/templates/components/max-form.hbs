@@ -11,20 +11,32 @@
 	</div>
 </div>
 
-{{materialize/weight-input weight=weight weightType=weightType onWeightChange=(action "maxLiftWeightChange")}}
+{{materialize/weight-input 
+	weight=weight 
+	weightType=weightType 
+	onWeightChange=(action "maxLiftWeightChange")
+}}
 
-<div class="row"></div>
+{{#if saveMax.isRunning}}
+	<div class="progress">
+		<div class="indeterminate"></div>
+	</div>
+{{else}}
+	<div class="row"></div>
+{{/if}}
 
 {{#if isCompact}}
 
 	<div class="row no-bottom-padding">
 		<div class="right">
 			<button {{action onCancel}} class="btn grey darker-1">Cancel</button>
-			{{#if max.isNew}}
-				<button {{action "maxFormSubmit"}} class="btn">Save</button>
-			{{else}}
-				<button {{action "maxFormSubmit"}} class="btn">Update</button>
-			{{/if}}
+			<button onclick={{perform saveMax}} class="btn">
+				{{#if max.isNew}}
+					Save
+				{{else}}
+					Update
+				{{/if}}
+			</button>
 		</div>
 	</div>
 
@@ -35,11 +47,13 @@
 			<button {{action onCancel}} class="btn-large grey darker-1 full-width">Cancel</button>
 		</div>
 		<div class="col s6">
-			{{#if max.isNew}}
-				<button {{action "maxFormSubmit"}} class="btn-large full-width">Save</button>
-			{{else}}
-				<button {{action "maxFormSubmit"}} class="btn-large full-width">Update</button>
-			{{/if}}
+			<button onclick={{perform saveMax}} class="btn-large full-width">
+				{{#if max.isNew}}
+					Save
+				{{else}}
+					Update
+				{{/if}}
+			</button>
 		</div>
 	</div>
 

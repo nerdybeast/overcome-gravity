@@ -1,13 +1,14 @@
 import Component from '@ember/component';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { isBlank } from '@ember/utils';
+import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 import M from 'materialize-css';
 
 export default Component.extend(ComponentValidateMixin, {
 
 	exerciseName: null,
-	defaultExerciseName: null,
+	recommendedExerciseName: null,
 	selectedMaxClientId: null,
 	exerciseType: 'percent',
 	maxes: null,
@@ -27,6 +28,10 @@ export default Component.extend(ComponentValidateMixin, {
 	selectedMax: null,
 
 	isPercentBasedExercise: equal('exerciseType', 'percent'),
+
+	defaultExerciseName: computed('recommendedExerciseName', 'selectedMax', function() {
+		return this.selectedMax !== null ? this.selectedMax.get('name') : this.recommendedExerciseName;
+	}),
 
 	actions: {
 

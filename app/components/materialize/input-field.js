@@ -27,10 +27,6 @@ export default Component.extend({
 	triggerValidation: 0,
 	onChange: null,
 
-	init() {
-		this._super(...arguments);
-	},
-
 	classNames: ['input-field'],
 	classNameBindings: ['inline'],
 
@@ -113,27 +109,12 @@ export default Component.extend({
 
 		if(this.onChange === null || typeof this.onChange !== 'function') return;
 
-		this.onChange(value);/*.then(successMessage => {
-
-			if(!successMessage) {
-				this.clearValidationState();
-				return;
-			}
-
-			this.setSuccessValidationState(successMessage);
-
-		}).catch(errorMessage => {
-
-			this.setErrorValidationState(errorMessage);
-
-		});*/
+		this.onChange(value);
 	},
 
 	didInsertElement() {
 
-		//if(this.get('value') !== null) {
-			M.updateTextFields();
-		//}
+		M.updateTextFields();
 
 		const inputElement = this.getInputElement();
 		inputElement.addEventListener('input', this.inputValueChange.bind(this));

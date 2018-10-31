@@ -58,6 +58,15 @@ table.select-input {
 	}
 }
 
+table.basic {
+	tr {
+		border: none;
+		td {
+			padding: 0px;
+		}
+	}
+}
+
 .modal-footer {
 	//row adds a margin-bottom that makes the whole modal scroll which doesn't look good
 	.row {

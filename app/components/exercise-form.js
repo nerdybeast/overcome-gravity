@@ -32,8 +32,7 @@ export default Component.extend(ComponentValidateMixin, {
 		},
 
 		deleteSet(theSet) {
-			//TODO: theSet.delete()
-			this.get('store').unloadRecord(theSet);
+			return theSet.destroyRecord();
 		}
 	}
 });

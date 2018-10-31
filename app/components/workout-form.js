@@ -4,6 +4,7 @@ import { isBlank } from '@ember/utils';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { inject as service } from '@ember/service';
 import M from 'materialize-css';
+import { task } from 'ember-concurrency';
 
 export default Component.extend(ComponentValidateMixin, {
 
@@ -53,15 +54,10 @@ export default Component.extend(ComponentValidateMixin, {
 		this.getModalInstance('cancelWorkoutModalId').destroy();
 	},
 
-	actions: {
+	saveWorkout: task(function * () {
 
-		addExercise(id) {
-			this.goToExerciseRoute(id, null);
-		},
+		try {
 
-		saveWorkout() {
-
-			let errors = [];
 			this.set('hasSubmittedForm', true);
 
 			if(isBlank(this.workout.get('name'))) {
@@ -69,16 +65,26 @@ export default Component.extend(ComponentValidateMixin, {
 				this.workout.set('name', this.defaultWorkoutName);
 			}
 
-			if(errors.length > 0) {
+			yield this.onSaveWorkout();
 
-				M.toast({
-					html: errors.join('\n')
-				});
+		} catch(error) {
 
+			M.toast({
+				html: error.message
+			});
+		}
+
+	}).drop(),
+
+	actions: {
+
+		addExercise(id) {
+
+			if(this.saveWorkout.isRunning) {
 				return;
 			}
 
-			this.get('onSaveWorkout')();
+			this.goToExerciseRoute(id, null);
 		},
 
 		cancelWorkoutConfirm() {

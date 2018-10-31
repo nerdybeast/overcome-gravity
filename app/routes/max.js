@@ -28,7 +28,9 @@ export default Route.extend({
 			}
 			
 			return store.createRecord('max', {
-				clientId: uuid()
+				clientId: uuid(),
+				kg: 0,
+				lbs: 0
 			});
 		}
 

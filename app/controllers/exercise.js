@@ -14,7 +14,7 @@ export default Controller.extend({
 	exercises: alias('model.exercises'),
 	maxes: alias('model.maxes'),
 
-	defaultExerciseName: computed('exercises.@each.name', function() {
+	recommendedExerciseName: computed('exercises.@each.name', function() {
 		const defaultExercisesCount = this.exercises.filter(exercise => exercise.getWithDefault('name', '').toLowerCase().startsWith('exercise ')).length;
 		return `Exercise ${defaultExercisesCount + 1}`;
 	}),

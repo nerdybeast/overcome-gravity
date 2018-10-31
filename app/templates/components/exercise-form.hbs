@@ -1,14 +1,23 @@
-<h5>Exercise {{exercise.order}}</h5>
-
-<div class="row" style="margin-bottom:0px;">
-	<div class="col s12">
-		{{materialize/input-field 
-			label="Exercise Name" 
-			value=exercise.name 
-			data-attr="disabled"
-		}}
-	</div>
-</div>
+<table class="basic">
+	<tr>
+		<td>
+			<span style="font-size:2.5em; position:relative; top:-5px;">
+				{{exercise.order}}.
+			</span>
+		</td>
+		<td>
+			<div class="row" style="margin-bottom:0px;">
+				<div class="col s12">
+					{{materialize/input-field 
+						label="Exercise Name" 
+						value=exercise.name 
+						data-attr="disabled"
+					}}
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
 
 {{#if exercise.sets}}
 	<div class="row">

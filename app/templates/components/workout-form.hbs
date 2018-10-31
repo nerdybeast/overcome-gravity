@@ -21,10 +21,20 @@
 	}}
 {{/each}}
 
-{{#if workout.exercises}}
-	<div class="row">
-		<div class="divider"></div>
+{{#if saveWorkout.isRunning}}
+	<div class="row" style="margin-bottom: 0px;">
+		<div class="col s12">
+			<div class="progress">
+				<div class="indeterminate"></div>
+			</div>
+		</div>
 	</div>
+{{else}}
+	{{#if workout.exercises}}
+		<div class="row">
+			<div class="divider"></div>
+		</div>
+	{{/if}}
 {{/if}}
 
 <div class="row">
@@ -41,7 +51,7 @@
 		</button>
 	</div>
 	<div class="col s6">
-		<button {{action "saveWorkout"}} class="btn-large full-width blue darken-1">
+		<button onclick={{perform saveWorkout}} class="btn-large full-width blue darken-1">
 			SAVE
 		</button>
 	</div>

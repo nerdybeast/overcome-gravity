@@ -57,7 +57,7 @@ export default Controller.extend({
 
 			const workoutPromise = this.workout.get('hasDirtyAttributes') ? this.workout.save() : resolve(this.workout);
 
-			workoutPromise.then(() => {
+			return workoutPromise.then(() => {
 
 				const exercisesPromises = exercises.map(exercise => exercise.get('hasDirtyAttributes') ? exercise.save() : resolve(exercise));
 				return Promise.all(exercisesPromises);
