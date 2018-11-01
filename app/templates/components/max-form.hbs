@@ -17,13 +17,15 @@
 	onWeightChange=(action "maxLiftWeightChange")
 }}
 
-{{#if saveMax.isRunning}}
-	<div class="progress">
-		<div class="indeterminate"></div>
-	</div>
-{{else}}
-	<div class="row"></div>
-{{/if}}
+<div class="row">
+	{{#if saveMax.isRunning}}
+		<div class="col s12">
+			<div class="progress">
+				<div class="indeterminate"></div>
+			</div>
+		</div>
+	{{/if}}
+</div>
 
 {{#if isCompact}}
 
