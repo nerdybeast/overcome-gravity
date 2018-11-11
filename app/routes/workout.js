@@ -33,7 +33,8 @@ export default Route.extend({
 		}
 
 		return hash({
-			maxes: store.peekAll('max'),
+			//TODO: don't do findAll, too many requests to the backend
+			maxes: store.findAll('max'),
 			workouts: store.peekAll('workout'),
 			workout
 		});
