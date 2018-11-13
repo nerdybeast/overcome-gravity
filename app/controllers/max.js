@@ -5,10 +5,20 @@ import { isBlank } from '@ember/utils';
 
 export default Controller.extend({
 
-	queryParams: ['maxClientId', 'exerciseClientId', 'workoutClientId'],
+	queryParams: [
+		'maxClientId',
+		'exerciseClientId',
+		'workoutClientId',
+
+		//Not guaranteed to be passed but if coming from the exercise route, the exercise name will be passed to this max 
+		//controller so we can send it back and have the exercise controller display the correct exercise name.
+		'exerciseName'
+	],
+
 	maxClientId: null,
 	exerciseClientId: null,
 	workoutClientId: null,
+	exerciseName: null,
 
 	max: alias('model'),
 
@@ -28,7 +38,8 @@ export default Controller.extend({
 				this.transitionToRoute('exercise', 'new', {
 					queryParams: {
 						workoutClientId: this.workoutClientId,
-						maxClientId: this.maxClientId
+						maxClientId: this.maxClientId,
+						presetExerciseName: this.exerciseName
 					}
 				});
 				return;

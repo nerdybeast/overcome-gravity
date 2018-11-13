@@ -1,22 +1,28 @@
 import Controller from '@ember/controller';
 import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { uuid } from 'ember-cli-uuid';
+import { isBlank } from '@ember/utils';
 
 export default Controller.extend({
 
-	queryParams: ['exerciseClientId', 'workoutClientId', 'maxId'],
+	queryParams: ['exerciseClientId', 'workoutClientId', 'maxId', 'presetExerciseName'],
 	exerciseClientId: null,
 	workoutClientId: null,
 	maxId: null,
+	presetExerciseName: null,
+
+	//Passed to the "new exercise form"
+	exerciseName: null,
 
 	workout: alias('model.workout'),
+	
+	//This is all exercises in the app, not just the ones related to the parent workout.
 	exercises: alias('model.exercises'),
 	maxes: alias('model.maxes'),
 
 	recommendedExerciseName: computed('exercises.@each.name', function() {
-		const defaultExercisesCount = this.exercises.filter(exercise => exercise.getWithDefault('name', '').toLowerCase().startsWith('exercise ')).length;
-		return `Exercise ${defaultExercisesCount + 1}`;
+		return `Exercise ${this.workout.get('exercises.length') + 1}`;
 	}),
 
 	currentExerciseOrderNumber: computed('workout.exercises.[]', function() {
@@ -25,15 +31,23 @@ export default Controller.extend({
 		}, 0);
 	}),
 
+	exerciseNameObserver: observer('presetExerciseName', 'exerciseName', function() {
+		if(!isBlank(this.presetExerciseName) && isBlank(this.exerciseName)) {
+			this.set('exerciseName', this.presetExerciseName);
+			this.set('presetExerciseName', null);
+		}
+	}),
+
 	transitionToWorkoutRoute() {
 
 		const workoutId = this.workout.get('id') || 'new';
 
-		this.transitionToRoute('workout', workoutId, {
-			queryParams: {
-				workoutClientId: this.workout.get('clientId')
-			}
-		});
+		const queryParams = {
+			workoutClientId: this.workout.get('clientId'),
+			mode: 'edit'
+		};
+
+		this.transitionToRoute('workout', workoutId, { queryParams });
 	},
 
 	actions: {
@@ -65,7 +79,8 @@ export default Controller.extend({
 				queryParams: {
 					maxClientId: max.get('clientId'),
 					exerciseClientId: this.exerciseClientId,
-					workoutClientId: this.workoutClientId
+					workoutClientId: this.workoutClientId,
+					exerciseName: this.exerciseName
 				}
 			});
 		}

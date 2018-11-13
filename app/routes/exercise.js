@@ -29,5 +29,13 @@ export default Route.extend({
 		const workout = store.peekAll('workout').find(workout => workout.get('clientId') === workoutClientId);
 
 		return { exercises, maxes, workout };
+	},
+
+	afterModel(model) {
+		
+		//We shouldn't be adding an exercise to a workout that doesn't exist so transition the user back to the workouts list.
+		if(!model.workout) {
+			this.transitionTo('workouts');
+		}
 	}
 });

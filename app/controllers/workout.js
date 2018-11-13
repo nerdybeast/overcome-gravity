@@ -38,7 +38,7 @@ export default Controller.extend({
 			});
 		},
 
-		goToExerciseRoute(exerciseId, exerciseClientId/*, workoutClientId*/) {
+		goToExerciseRoute(exerciseId, exerciseClientId) {
 
 			exerciseId = exerciseId || 'unsaved';
 			const workoutClientId = this.workout.get('clientId');

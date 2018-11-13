@@ -44,6 +44,7 @@ export default Route.extend({
 		this._super(controller, workout);
 		controller.set('maxes', maxes);
 		controller.set('workouts', workouts);
+		controller.set('workoutClientId', null);
 	},
 
 	createWorkout() {

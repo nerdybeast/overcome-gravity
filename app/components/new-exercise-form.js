@@ -29,8 +29,8 @@ export default Component.extend(ComponentValidateMixin, {
 
 	isPercentBasedExercise: equal('exerciseType', 'percent'),
 
-	defaultExerciseName: computed('recommendedExerciseName', 'selectedMax', function() {
-		return this.selectedMax !== null ? this.selectedMax.get('name') : this.recommendedExerciseName;
+	defaultExerciseName: computed('recommendedExerciseName', 'selectedMax', 'isPercentBasedExercise', function() {
+		return this.selectedMax !== null && this.isPercentBasedExercise ? this.selectedMax.get('name') : this.recommendedExerciseName;
 	}),
 
 	actions: {
