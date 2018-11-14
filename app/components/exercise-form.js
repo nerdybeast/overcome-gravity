@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { inject as service } from '@ember/service';
-import { equal } from '@ember/object/computed';
+import { equal, sort } from '@ember/object/computed';
 
 export default Component.extend(ComponentValidateMixin, {
 
@@ -20,6 +20,9 @@ export default Component.extend(ComponentValidateMixin, {
 
 	isStandard: equal('exercise.type', 'standard'),
 	isPercent: equal('exercise.type', 'percent'),
+
+	setSortingAsc: Object.freeze(['order']),
+	sets: sort('exercise.sets', 'setSortingAsc'),
 
 	actions: {
 

@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { uuid } from 'ember-cli-uuid';
 import { isEmpty } from '@ember/utils';
+import { resolve } from 'rsvp';
 
 export default Route.extend({
 
@@ -16,27 +17,33 @@ export default Route.extend({
 		const { workout_id, workoutClientId } = params;
 		const store = this.get('store');
 
-		let workout;
+		let workoutPromise;
 
 		if(workout_id === 'new') {
-			if(!isEmpty(workoutClientId)) {
-				workout = store.peekAll('workout').findBy('clientId', workoutClientId);
-			} else {
-				workout = store.peekAll('workout').findBy('isNew');
-			}
-		} else {
-			workout = store.peekRecord('workout', workout_id);
-		}
 
-		if(!workout) {
-			workout = this.createWorkout();
+			let unsavedWorkout;
+
+			if(!isEmpty(workoutClientId)) {
+				unsavedWorkout = store.peekAll('workout').findBy('clientId', workoutClientId);
+			} else {
+				unsavedWorkout = store.peekAll('workout').findBy('isNew');
+			}
+
+			if(!unsavedWorkout) {
+				unsavedWorkout = this.createWorkout();
+			}
+
+			workoutPromise = resolve(unsavedWorkout);
+
+		} else {
+			workoutPromise = store.findRecord('workout', workout_id);
 		}
 
 		return hash({
 			//TODO: don't do findAll, too many requests to the backend
-			maxes: store.findAll('max'),
-			workouts: store.peekAll('workout'),
-			workout
+			maxes: store.findAll('max').sortBy('name'),
+			workouts: store.peekAll('workout').sortBy('name'),
+			workout: workoutPromise
 		});
 	},
 

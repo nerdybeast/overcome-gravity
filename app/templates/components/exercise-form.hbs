@@ -19,7 +19,18 @@
 	</tr>
 </table>
 
-{{#if exercise.sets}}
+<!--
+<div class="row">
+	<div class="col s10 m11">
+		{{!exercise.order}}. {{!exercise.name}}
+	</div>
+	<div class="col s2 m1 right-align">
+		{{!materialize/material-icon icon="more_vert"}}
+	</div>
+</div>
+-->
+
+{{#if sets}}
 	<div class="row">
 		<div class="col s12">
 			<table class="centered">
@@ -36,7 +47,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				{{#each exercise.sets as |exerciseSet|}}
+				{{#each sets as |exerciseSet|}}
 					<tr>
 						<td>{{exerciseSet.reps}}</td>
 						{{#if isPercent}}

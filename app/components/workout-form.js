@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import { alias, sort } from '@ember/object/computed';
 import { isBlank } from '@ember/utils';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { inject as service } from '@ember/service';
@@ -22,6 +23,34 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	store: service('store'),
+	exercises: alias('workout.exercises'),
+
+	exercisesSortAsc: Object.freeze(['order']),
+	sortedExercises: sort('exercises', 'exercisesSortAsc'),
+
+	workoutIsDirty: computed('workout', function() {
+
+		const workoutIsDirty = this.workout.get('hasDirtyAttributes');
+
+		if(workoutIsDirty) {
+			return true;
+		}
+
+		const exercises = this.workout.get('exercises');
+		const exercisesAreDirty = exercises.isAny('hasDirtyAttributes');
+
+		if(exercisesAreDirty) {
+			return true;
+		}
+
+		const exerciseWithDirtySets = exercises.find(exercise => exercise.get('sets').isAny('hasDirtyAttributes'));
+
+		if(exerciseWithDirtySets) {
+			return true;
+		}
+
+		return false;
+	}),
 
 	hasSubmittedForm: false,
 
@@ -88,7 +117,13 @@ export default Component.extend(ComponentValidateMixin, {
 		},
 
 		cancelWorkoutConfirm() {
-			this.openModal('cancelWorkoutModalId');
+
+			if(this.workoutIsDirty) {
+				this.openModal('cancelWorkoutModalId');
+				return;
+			}
+
+			this.onCancelWorkout();
 		},
 
 		abortCancel() {

@@ -1,7 +1,7 @@
 {{page-heading title="Workouts"}}
 
 {{#if savedWorkouts}}
-	{{#each savedWorkouts as |workout|}}
+	{{#each sortedWorkouts as |workout|}}
 
 		{{!-- "clickable" is required for safari and some mobile browsers because "non-clickable" elements like a div
 		do not trigger click events even if an action has been specified on it. --}}

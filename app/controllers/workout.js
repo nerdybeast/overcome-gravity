@@ -90,6 +90,9 @@ export default Controller.extend({
 			const sets = [];
 			const exercises = [];
 
+			//Need to capture this before rolling back the attributes
+			const workoutIsNew = this.workout.get('isNew');
+
 			this.workout.get('exercises').forEach(exercise => {
 
 				exercise.get('sets').forEach(theSet => {
@@ -103,7 +106,11 @@ export default Controller.extend({
 			exercises.forEach(exercise => exercise.rollbackAttributes());
 			this.workout.rollbackAttributes();
 
-			this.transitionToRoute('workouts');
+			if(workoutIsNew) {
+				return this.transitionToRoute('workouts');
+			}
+
+			this.set('mode', null);
 		}
 	}
 });

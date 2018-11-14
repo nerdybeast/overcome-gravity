@@ -1,9 +1,14 @@
 import Controller from '@ember/controller';
-import { alias, filterBy } from '@ember/object/computed';
+import { alias, filterBy, sort } from '@ember/object/computed';
 
 export default Controller.extend({
+
 	workouts: alias('model'),
 	savedWorkouts: filterBy('workouts', 'isNew', false),
+
+	workoutSortOrderAsc: Object.freeze(['name']),
+	sortedWorkouts: sort('savedWorkouts', 'workoutSortOrderAsc'),
+
 	actions: {
 		goToWorkout(workoutId) {
 			this.transitionToRoute('workout', workoutId, {

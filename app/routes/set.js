@@ -39,7 +39,7 @@ export default Route.extend({
 
 			exerciseSet = store.createRecord('set', {
 				clientId,
-				order: previousSet.get('order') || 1,
+				order: (previousSet.get('order') || 0) + 1,
 				reps: previousSet.get('reps') || 1,
 				percent: previousSet.get('percent') || 50,
 				repeatCount: previousSet.get('repeatCount') || 1,
