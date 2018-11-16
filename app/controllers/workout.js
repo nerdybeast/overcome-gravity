@@ -76,7 +76,8 @@ export default Controller.extend({
 
 			}).then(() => {
 				this.set('workoutClientId', null);
-				this.transitionToRoute('workouts');
+				this.set('mode', null);
+				this.transitionToRoute('workout', this.workout.get('id'));
 			});
 
 		},

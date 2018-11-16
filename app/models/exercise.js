@@ -1,5 +1,6 @@
 import DS from 'ember-data';
-import { filterBy } from '@ember/object/computed';
+import { computed } from '@ember/object';
+import { sort, mapBy, max } from '@ember/object/computed';
 
 export default DS.Model.extend({
 
@@ -14,5 +15,16 @@ export default DS.Model.extend({
 	workout: DS.belongsTo('workout'),
 	max: DS.belongsTo('max'),
 
-	savedSets: filterBy('sets', 'isNew', false)
+	setsOrderingAsc: Object.freeze(['order']),
+	orderedSets: sort('sets', 'setsOrderingAsc'),
+
+	//Returns an array of all the sets order numbers, ex: [1, 2, 3, ...]
+	setsOrderNumbers: mapBy('sets', 'order'),
+
+	//Will return "-Infinity" if the dependent array is empty
+	maxSetOrderNumber: max('setsOrderNumbers'),
+
+	nextSetOrderNumber: computed('maxSetOrderNumber', function() {
+		return this.maxSetOrderNumber !== -Infinity ? this.maxSetOrderNumber + 1 : 1;
+	})
 });
