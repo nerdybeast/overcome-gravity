@@ -1,4 +1,4 @@
-{{#each sortedExercises as |exercise|}}
+{{#each workout.orderedExercises as |exercise|}}
 	<div class="no-fluff">
 		<div class="row title">
 			<div class="col s12">
@@ -19,7 +19,7 @@
 				Repeat
 			</div>
 		</div>
-		{{#each exercise.sets as |theSet|}}
+		{{#each exercise.orderedSets as |theSet|}}
 			<div class="row body">
 				<div class="col s4 center">
 					<span>{{theSet.reps}}</span>
