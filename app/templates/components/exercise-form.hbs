@@ -37,7 +37,7 @@
 				<thead>
 					<tr>
 						<th>Reps</th>
-						<th>Weight</th>
+						<th>KG / LBS</th>
 						{{#if isPercent}}
 							<th>Percent</th>
 						{{/if}}
@@ -50,11 +50,9 @@
 				{{#each sets as |exerciseSet|}}
 					<tr>
 						<td>{{exerciseSet.reps}}</td>
+						<td>{{exerciseSet.weight.kg}} / {{exerciseSet.weight.lbs}}</td>
 						{{#if isPercent}}
-							<td>{{exerciseSet.weight.kg}}kg</td>
 							<td>{{exerciseSet.percent}}%</td>
-						{{else}}
-							<td>{{exerciseSet.kg}}kg</td>
 						{{/if}}
 						<td>{{exerciseSet.repeatCount}}</td>
 						<td>{{materialize/material-icon icon="edit" onClick=(action "editSet" exerciseSet)}}</td>
