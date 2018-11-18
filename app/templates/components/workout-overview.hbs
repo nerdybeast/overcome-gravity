@@ -2,39 +2,50 @@
 	<div class="no-fluff">
 		<div class="row title">
 			<div class="col s12">
-				<span>{{exercise.name}}</span>
+				<div>
+					{{!-- This will be 1.5em because it's the first span under no-fluff>row.title --}}
+					<span>{{exercise.name}}</span>
+				</div>
+				{{#if exercise.isPercentBased}}
+					<div>
+						{{!-- Need to reset this text to be the normal size --}}
+						<span class="grey-text" style="font-size:1em;">
+							Based on {{link-to exercise.max.name "max" exercise.max.id}} max
+						</span>
+					</div>
+				{{/if}}
 			</div>
 			<div class="col s12">
 				<div class="divider"></div>
 			</div>
 		</div>
 		<div class="row header">
-			<div class="col s4 center">
+			<div class="col s3 center">
 				Reps
 			</div>
-			<div class="col s4 center">
-				KG
+			<div class="col s6 center">
+				KG / LBS
 			</div>
-			<div class="col s4 center">
+			<div class="col s3 center">
 				Repeat
 			</div>
 		</div>
 		{{#each exercise.orderedSets as |theSet|}}
 			<div class="row body">
-				<div class="col s4 center">
+				<div class="col s3 center">
 					<span>{{theSet.reps}}</span>
 				</div>
-				<div class="col s4 center">
+				<div class="col s6 center">
 					<span>
-						{{theSet.weight.kg}}
+						{{theSet.weight.kg}} / {{theSet.weight.lbs}}
 						{{#if theSet.isPercentBasedSet}}
-							<span style="font-size:.5em;">
+							<span style="font-size:.75em;">
 								({{theSet.percent}}%)
 							</span>
 						{{/if}}
 					</span>
 				</div>
-				<div class="col s4 center">
+				<div class="col s3 center">
 					<span>{{theSet.repeatCount}}</span>
 				</div>
 			</div>

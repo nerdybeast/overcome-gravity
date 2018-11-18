@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import { sort, mapBy, max } from '@ember/object/computed';
+import { sort, mapBy, max, equal } from '@ember/object/computed';
 
 export default DS.Model.extend({
 
@@ -26,5 +26,7 @@ export default DS.Model.extend({
 
 	nextSetOrderNumber: computed('maxSetOrderNumber', function() {
 		return this.maxSetOrderNumber !== -Infinity ? this.maxSetOrderNumber + 1 : 1;
-	})
+	}),
+
+	isPercentBased: equal('type', 'percent')
 });
