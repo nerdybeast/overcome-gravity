@@ -47,6 +47,8 @@ export default Controller.extend({
 			mode: 'edit'
 		};
 
+		this.set('exerciseName', null);
+
 		this.transitionToRoute('workout', workoutId, { queryParams });
 	},
 

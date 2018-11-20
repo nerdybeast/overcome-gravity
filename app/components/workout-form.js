@@ -76,11 +76,26 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	didInsertElement() {
+
 		M.Modal.init(this.getModalElement('cancelWorkoutModalId'));
+
+		const workoutNamesObject = this.store.peekAll('workout').map(wo => wo.get('name')).sort().reduce((woNamesObj, workoutName) => {
+			if(workoutName) {
+				woNamesObj[workoutName] = null;
+			}
+			return woNamesObj;
+		}, {});
+
+		M.Autocomplete.init(document.getElementById('workout-name-input'), {
+			data: workoutNamesObject
+		})
 	},
 
 	willDestroyElement() {
 		this.getModalInstance('cancelWorkoutModalId').destroy();
+
+		var instance = M.Autocomplete.getInstance(document.getElementById('workout-name-input'));
+		if(instance) instance.destroy();
 	},
 
 	saveWorkout: task(function * () {

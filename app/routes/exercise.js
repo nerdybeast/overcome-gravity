@@ -25,7 +25,7 @@ export default Route.extend({
 
 		const store = this.get('store');
 		const exercises = store.peekAll('exercise');
-		const maxes  = store.peekAll('max').filterBy('isNew', false);
+		const maxes = store.peekAll('max');
 		const workout = store.peekAll('workout').find(workout => workout.get('clientId') === workoutClientId);
 
 		return { exercises, maxes, workout };

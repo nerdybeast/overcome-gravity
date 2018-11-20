@@ -12,6 +12,7 @@ export default Component.extend(ComponentValidateMixin, {
 	selectedMaxClientId: null,
 	exerciseType: 'percent',
 	maxes: null,
+	exercises: null,
 	onSave: null,
 	onCancel: null,
 	onNewMax: null,
@@ -32,6 +33,53 @@ export default Component.extend(ComponentValidateMixin, {
 	defaultExerciseName: computed('recommendedExerciseName', 'selectedMax', 'isPercentBasedExercise', function() {
 		return this.selectedMax !== null && this.isPercentBasedExercise ? this.selectedMax.get('name') : this.recommendedExerciseName;
 	}),
+
+	onAutocomplete(exerciseName) {
+		
+		if(!this.isPercentBasedExercise || this.selectedMax) {
+			return;
+		}
+
+		const exercises = this.exercises.filterBy('name', exerciseName);
+
+		let exerciseToUse = exercises.find(exercise => exercise.get('max.clientId'));
+
+		if(!exerciseToUse) {
+			exerciseToUse = exercises.get('firstObject');
+		}
+
+		const maxCientId = exerciseToUse.get('max.clientId');
+
+		if(maxCientId) {
+			this.set('selectedMaxClientId', maxCientId);
+		}
+	},
+
+	didInsertElement() {
+
+		//Note: This reduce function will eliminate duplicates
+		const exerciseNamesObject = this.exercises
+			.map(exercise => exercise.get('name'))
+			.sort()
+			.reduce((prev, curr) => {
+				if(curr) {
+					prev[curr] = null;
+				}
+				return prev;
+			}, {})
+
+		const exerciseNameInputElement = document.getElementById('exercise-name-input');
+
+		M.Autocomplete.init(exerciseNameInputElement, {
+			data: exerciseNamesObject,
+			onAutocomplete: this.onAutocomplete.bind(this)
+		});
+	},
+
+	willDestroyElement() {
+		var instance = M.Autocomplete.getInstance(document.getElementById('exercise-name-input'));
+		if(instance) instance.destroy();
+	},
 
 	actions: {
 
@@ -57,10 +105,6 @@ export default Component.extend(ComponentValidateMixin, {
 			}
 
 			this.onSave(this.exerciseName, this.exerciseType, this.selectedMax);
-			this.set('exerciseName', null);
-
-			//Clear the selected max so that the next time this form is opened, the previous max isn't already selected.
-			this.set('selectedMax', null);
 		},
 
 		cancel() {

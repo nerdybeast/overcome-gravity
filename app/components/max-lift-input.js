@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import SelectInputOption from 'overcome-gravity/models/objects/select-input-option';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { uuid } from 'ember-cli-uuid';
 import { inject as service } from '@ember/service';
 
@@ -43,6 +43,12 @@ export default Component.extend(ComponentValidateMixin, {
 		});
 
 		return [readOnlyOption, ...maxesOptions, addNewMaxOption];
+	}),
+
+	defaultMaxObserver: observer('defaultMaxClientId', function() {
+		if(this.defaultMaxClientId) {
+			this.onChange(this.maxes.find(max => max.get('clientId') === this.defaultMaxClientId));
+		}
 	}),
 
 	actions: {

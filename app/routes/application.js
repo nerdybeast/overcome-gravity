@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { uuid } from 'ember-cli-uuid';
+// import { uuid } from 'ember-cli-uuid';
 
 export default Route.extend({
 	
