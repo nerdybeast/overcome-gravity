@@ -47,7 +47,7 @@ export default Controller.extend({
 				queryParams: {
 					exerciseClientId,
 					workoutClientId,
-					maxClientId: null,
+					maxId: null,
 					presetExerciseName: null
 				}
 			});

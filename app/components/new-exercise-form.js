@@ -9,7 +9,7 @@ export default Component.extend(ComponentValidateMixin, {
 
 	exerciseName: null,
 	recommendedExerciseName: null,
-	selectedMaxClientId: null,
+	selectedMaxId: null,
 	exerciseType: 'percent',
 	maxes: null,
 	exercises: null,
@@ -21,8 +21,8 @@ export default Component.extend(ComponentValidateMixin, {
 
 		this._super(...arguments);
 
-		if(!isBlank(this.selectedMaxClientId)) {
-			this.set('selectedMax', this.maxes.findBy('clientId', this.selectedMaxClientId));
+		if(!isBlank(this.selectedMaxId)) {
+			this.set('selectedMax', this.maxes.findBy('id', this.selectedMaxId));
 		}
 	},
 
@@ -48,10 +48,10 @@ export default Component.extend(ComponentValidateMixin, {
 			exerciseToUse = exercises.get('firstObject');
 		}
 
-		const maxCientId = exerciseToUse.get('max.clientId');
+		const maxId = exerciseToUse.get('max.id');
 
-		if(maxCientId) {
-			this.set('selectedMaxClientId', maxCientId);
+		if(maxId) {
+			this.set('selectedMaxId', maxId);
 		}
 	},
 
@@ -85,8 +85,8 @@ export default Component.extend(ComponentValidateMixin, {
 
 		maxLiftChange(max) {
 
-			if(max.get('isNew')) {
-				this.onNewMax(max);
+			if(!max) {
+				this.onNewMax();
 				return;
 			}
 

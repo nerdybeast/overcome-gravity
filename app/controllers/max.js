@@ -6,7 +6,6 @@ import { isBlank } from '@ember/utils';
 export default Controller.extend({
 
 	queryParams: [
-		'maxClientId',
 		'exerciseClientId',
 		'workoutClientId',
 
@@ -15,7 +14,6 @@ export default Controller.extend({
 		'exerciseName'
 	],
 
-	maxClientId: null,
 	exerciseClientId: null,
 	workoutClientId: null,
 	exerciseName: null,
@@ -38,7 +36,7 @@ export default Controller.extend({
 				this.transitionToRoute('exercise', 'new', {
 					queryParams: {
 						workoutClientId: this.workoutClientId,
-						maxClientId: this.maxClientId,
+						maxId: this.max.get('id'),
 						presetExerciseName: this.exerciseName
 					}
 				});

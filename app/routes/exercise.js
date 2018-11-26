@@ -10,7 +10,7 @@ export default Route.extend({
 		workoutClientId: {
 			refreshModel: true
 		},
-		maxClientId: {
+		maxId: {
 			refreshModel: true
 		}
 	},
