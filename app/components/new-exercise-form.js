@@ -9,9 +9,10 @@ export default Component.extend(ComponentValidateMixin, {
 
 	exerciseName: null,
 	recommendedExerciseName: null,
-	selectedMaxClientId: null,
+	selectedMaxId: null,
 	exerciseType: 'percent',
 	maxes: null,
+	exercises: null,
 	onSave: null,
 	onCancel: null,
 	onNewMax: null,
@@ -20,8 +21,8 @@ export default Component.extend(ComponentValidateMixin, {
 
 		this._super(...arguments);
 
-		if(!isBlank(this.selectedMaxClientId)) {
-			this.set('selectedMax', this.maxes.findBy('clientId', this.selectedMaxClientId));
+		if(!isBlank(this.selectedMaxId)) {
+			this.set('selectedMax', this.maxes.findBy('id', this.selectedMaxId));
 		}
 	},
 
@@ -33,12 +34,59 @@ export default Component.extend(ComponentValidateMixin, {
 		return this.selectedMax !== null && this.isPercentBasedExercise ? this.selectedMax.get('name') : this.recommendedExerciseName;
 	}),
 
+	onAutocomplete(exerciseName) {
+		
+		if(!this.isPercentBasedExercise || this.selectedMax) {
+			return;
+		}
+
+		const exercises = this.exercises.filterBy('name', exerciseName);
+
+		let exerciseToUse = exercises.find(exercise => exercise.get('max.clientId'));
+
+		if(!exerciseToUse) {
+			exerciseToUse = exercises.get('firstObject');
+		}
+
+		const maxId = exerciseToUse.get('max.id');
+
+		if(maxId) {
+			this.set('selectedMaxId', maxId);
+		}
+	},
+
+	didInsertElement() {
+
+		//Note: This reduce function will eliminate duplicates
+		const exerciseNamesObject = this.exercises
+			.map(exercise => exercise.get('name'))
+			.sort()
+			.reduce((prev, curr) => {
+				if(curr) {
+					prev[curr] = null;
+				}
+				return prev;
+			}, {})
+
+		const exerciseNameInputElement = document.getElementById('exercise-name-input');
+
+		M.Autocomplete.init(exerciseNameInputElement, {
+			data: exerciseNamesObject,
+			onAutocomplete: this.onAutocomplete.bind(this)
+		});
+	},
+
+	willDestroyElement() {
+		var instance = M.Autocomplete.getInstance(document.getElementById('exercise-name-input'));
+		if(instance) instance.destroy();
+	},
+
 	actions: {
 
 		maxLiftChange(max) {
 
-			if(max.get('isNew')) {
-				this.onNewMax(max);
+			if(!max) {
+				this.onNewMax();
 				return;
 			}
 
@@ -57,10 +105,6 @@ export default Component.extend(ComponentValidateMixin, {
 			}
 
 			this.onSave(this.exerciseName, this.exerciseType, this.selectedMax);
-			this.set('exerciseName', null);
-
-			//Clear the selected max so that the next time this form is opened, the previous max isn't already selected.
-			this.set('selectedMax', null);
 		},
 
 		cancel() {

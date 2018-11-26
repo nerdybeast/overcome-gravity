@@ -39,18 +39,28 @@ export default Route.extend({
 			workoutPromise = store.findRecord('workout', workout_id);
 		}
 
+		let workouts = store.peekAll('workout');
+		let maxes = store.peekAll('max');
+
+		if(workouts.length === 0) {
+			workouts = store.findAll('workout', { reload: true });
+		}
+
+		if(maxes.length === 0) {
+			maxes = store.findAll('max', { reload: true });
+		}
+
 		return hash({
-			//TODO: don't do findAll, too many requests to the backend
-			maxes: store.findAll('max').sortBy('name'),
-			workouts: store.peekAll('workout').sortBy('name'),
+			maxes,
+			workouts,
 			workout: workoutPromise
 		});
 	},
 
 	setupController(controller, { maxes, workouts, workout }) {
 		this._super(controller, workout);
-		controller.set('maxes', maxes);
-		controller.set('workouts', workouts);
+		controller.set('maxes', maxes.sortBy('name'));
+		controller.set('workouts', workouts.sortBy('name'));
 		controller.set('workoutClientId', null);
 	},
 

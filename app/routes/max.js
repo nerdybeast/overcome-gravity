@@ -1,13 +1,9 @@
 import Route from '@ember/routing/route';
 import { uuid } from 'ember-cli-uuid';
-import { isBlank } from '@ember/utils';
 
 export default Route.extend({
 
 	queryParams: {
-		maxClientId: {
-			refreshModel: true
-		},
 		exerciseClientId: {
 			refreshModel: true
 		},
@@ -18,15 +14,11 @@ export default Route.extend({
 
 	model(params) {
 
-		const { max_id, maxClientId } = params;
+		const { max_id } = params;
 		const store = this.get('store');
 
 		if(max_id === 'new') {
-			
-			if(!isBlank(maxClientId)) {
-				return store.peekAll('max').findBy('clientId', maxClientId);
-			}
-			
+
 			return store.createRecord('max', {
 				clientId: uuid(),
 				kg: 0,
@@ -34,7 +26,7 @@ export default Route.extend({
 			});
 		}
 
-		return this.get('store').peekRecord('max', params.max_id);
+		return this.get('store').peekRecord('max', max_id);
 	}
 
 });

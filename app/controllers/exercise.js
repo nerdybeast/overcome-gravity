@@ -47,6 +47,8 @@ export default Controller.extend({
 			mode: 'edit'
 		};
 
+		this.set('exerciseName', null);
+
 		this.transitionToRoute('workout', workoutId, { queryParams });
 	},
 
@@ -74,10 +76,10 @@ export default Controller.extend({
 			this.transitionToWorkoutRoute();
 		},
 
-		addNewMax(max) {
+		addNewMax() {
 			this.transitionToRoute('max', 'new', {
 				queryParams: {
-					maxClientId: max.get('clientId'),
+					maxId: null,
 					exerciseClientId: this.exerciseClientId,
 					workoutClientId: this.workoutClientId,
 					exerciseName: this.exerciseName

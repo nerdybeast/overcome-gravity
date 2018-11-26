@@ -46,7 +46,9 @@ export default Controller.extend({
 			this.transitionToRoute('exercise', exerciseId, {
 				queryParams: {
 					exerciseClientId,
-					workoutClientId
+					workoutClientId,
+					maxId: null,
+					presetExerciseName: null
 				}
 			});
 		},

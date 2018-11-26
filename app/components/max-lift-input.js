@@ -1,15 +1,14 @@
 import Component from '@ember/component';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import SelectInputOption from 'overcome-gravity/models/objects/select-input-option';
-import { computed } from '@ember/object';
-import { uuid } from 'ember-cli-uuid';
+import { computed, observer } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default Component.extend(ComponentValidateMixin, {
 
 	store: service('store'),
 	maxes: null,
-	defaultMaxClientId: null,
+	defaultMaxId: null,
 	onChange: null,
 
 	init() {
@@ -17,11 +16,11 @@ export default Component.extend(ComponentValidateMixin, {
 		this.validateArguments('max-lift-input', ['maxes', 'onChange']);
 	},
 
-	maxesOptions: computed('maxes.@each.{id,name}', 'defaultMaxClientId', function() {
+	maxesOptions: computed('maxes.@each.{id,name}', 'defaultMaxId', function() {
 
 		const maxesOptions = this.maxes.sortBy('name').map(max => {
 
-			let selected = max.get('clientId') === this.defaultMaxClientId;
+			let selected = max.get('id') === this.defaultMaxId;
 
 			return SelectInputOption.create({
 				value: max.id,
@@ -45,20 +44,16 @@ export default Component.extend(ComponentValidateMixin, {
 		return [readOnlyOption, ...maxesOptions, addNewMaxOption];
 	}),
 
+	defaultMaxObserver: observer('defaultMaxId', function() {
+		if(this.defaultMaxId) {
+			this.onChange(this.maxes.findBy('id', this.defaultMaxId));
+		}
+	}),
+
 	actions: {
 
 		maxSelected(maxId) {
-
-			let max;
-
-			if(maxId !== 'add') {
-				max = this.maxes.findBy('id', maxId);
-			} else {
-				max = this.store.createRecord('max', {
-					clientId: uuid()
-				});
-			}
-
+			const max = this.maxes.findBy('id', maxId);
 			this.onChange(max);
 		}
 	}
