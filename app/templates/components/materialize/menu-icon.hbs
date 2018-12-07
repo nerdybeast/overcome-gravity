@@ -1,0 +1,22 @@
+{{materialize/material-icon
+	id=customIconId
+	dataTarget=customMenuId
+	icon="more_vert"
+	onClick=(action "openMenu")
+}}
+
+<ul id={{customMenuId}} class='dropdown-content'>
+
+	{{#if hasEditFunction}}
+		<li>
+			<span {{action onEdit}}>edit</span>
+		</li>
+	{{/if}}
+
+	{{#if hasDeleteFunction}}
+		<li>
+			<span {{action onDelete}}>delete</span>
+		</li>
+	{{/if}}
+
+</ul>

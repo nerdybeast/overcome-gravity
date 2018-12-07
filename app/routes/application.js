@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import preferences from '../models/preferences';
 // import { uuid } from 'ember-cli-uuid';
 
 export default Route.extend({
@@ -82,4 +83,18 @@ export default Route.extend({
 	// 	});
 	// }
 	
+	// model() {
+
+	// 	const store = this.get('store');
+
+	// 	const preferencesPromise = store.findAll('preferences').then(preferences => {
+	// 		return preferences;
+	// 	}).catch(e => {
+	// 		return null;
+	// 	});
+
+	// 	return preferencesPromise.then(preferences => {
+	// 		return { preferences };
+	// 	});
+	// }
 });

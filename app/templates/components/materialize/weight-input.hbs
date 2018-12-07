@@ -13,13 +13,21 @@
 		<div class="col">
 			<label for="weight-kg">
 				{{!-- TODO: The weight type to default to here needs to be configed based on the user's choice --}}
-				<input name="weight-type" type="radio" id="weight-kg" value="kg" checked />
+				{{#if isKG}}
+					<input name="weight-type" type="radio" id="weight-kg" value="kg" checked />
+				{{else}}
+					<input name="weight-type" type="radio" id="weight-kg" value="kg" />
+				{{/if}}
 				<span>KG</span>
 			</label>
 		</div>
 		<div class="col">
 			<label for="weight-lbs">
-				<input name="weight-type" type="radio" id="weight-lbs" value="lbs" />
+				{{#if isKG}}
+					<input name="weight-type" type="radio" id="weight-lbs" value="lbs" />
+				{{else}}
+					<input name="weight-type" type="radio" id="weight-lbs" value="lbs" checked />
+				{{/if}}
 				<span>LBS</span>
 			</label>
 		</div>

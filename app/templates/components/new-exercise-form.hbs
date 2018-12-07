@@ -13,17 +13,33 @@
 
 {{#materialize/radio-input inputName="workout-type" onChange=(action (mut exerciseType))}}
 	<div class="row">
-		<div class="col s6">
-			<label for="workout-type-percent">
-				<input name="workout-type" type="radio" id="workout-type-percent" value="percent" checked />
-				<span>Percent</span>
-			</label>
+		<div class="col s12">
+			<div>
+				<label for="workout-type-percent">
+					<input name="workout-type" type="radio" id="workout-type-percent" value="percent" checked />
+					<span>Percent</span>
+				</label>
+			</div>
+			<div>
+				<span class="help-text grey-text">
+					The weight for this exercise will be calculated based on the max selected below
+				</span>
+			</div>
 		</div>
-		<div class="col s6">
-			<label for="workout-type-standard">
-				<input name="workout-type" type="radio" id="workout-type-standard" value="standard" />
-				<span>Standard</span>
-			</label>
+	</div>
+	<div class="row">
+		<div class="col s12">
+			<div>
+				<label for="workout-type-standard">
+					<input name="workout-type" type="radio" id="workout-type-standard" value="standard" />
+					<span>Standard</span>
+				</label>
+			</div>
+			<div>
+				<span class="help-text grey-text">
+					The weight for this exercise will be entered manually
+				</span>
+			</div>
 		</div>
 	</div>
 {{/materialize/radio-input}}

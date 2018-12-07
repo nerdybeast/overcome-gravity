@@ -16,9 +16,8 @@
 
 	{{#page-heading title=workout.name}}
 		<div class="right">
-			{{materialize/material-icon 
-				icon="edit" 
-				onClick=(action "editWorkout" "edit")
+			{{materialize/menu-icon 
+				onEdit=(action "editWorkout" "edit")
 			}}
 		</div>
 	{{/page-heading}}

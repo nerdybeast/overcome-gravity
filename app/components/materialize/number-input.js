@@ -4,38 +4,47 @@ import { isBlank } from '@ember/utils';
 export default Component.extend({
 
 	label: 'Enter',
-	value: 0,
+	recommendedValue: 0,
+	value: null,
 	min: null,
 	max: null,
 	step: 1,
 	onChange: null,
 
-	init() {
+	// init() {
 
-		this._super(...arguments);
+	// 	this._super(...arguments);
 
-		if(isBlank(this.get('value'))) {
-			this.set('value', 0);
-		}
-	},
+	// 	if(isBlank(this.get('value'))) {
+	// 		this.set('value', 0);
+	// 	}
+	// },
 
 	actions: {
 
 		increaseCount() {
+			this.ensureValueIsSet();
 			this.incrementProperty('value');
 			this.notifyOfChange();
 		},
 
 		decreaseCount() {
-			if(this.get('value') === 0) return;
+			this.ensureValueIsSet();
+			if(this.value === 0) return;
 			this.decrementProperty('value');
 			this.notifyOfChange();
 		}
 	},
 
+	ensureValueIsSet() {
+		if(isBlank(this.value)) {
+			this.set('value', this.recommendedValue);
+		}
+	},
+
 	notifyOfChange() {
 		if(typeof this.onChange === 'function') {
-			this.onChange(this.get('value'));
+			this.onChange(this.value);
 		}
 	}
 
