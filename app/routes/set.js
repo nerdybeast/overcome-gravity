@@ -35,6 +35,11 @@ export default Route.extend({
 
 			const clientId = uuid();
 			const exercise = store.peekAll('exercise').findBy('clientId', exerciseClientId);
+
+			if(!exercise) {
+				return this.transitionTo('workout', 'new');
+			}
+
 			const previousSet = exercise.get('sets.lastObject') || EmberObject.create();
 
 			exerciseSet = store.createRecord('set', {

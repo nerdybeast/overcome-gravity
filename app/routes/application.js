@@ -83,18 +83,18 @@ export default Route.extend({
 	// 	});
 	// }
 	
-	model() {
+	// model() {
 
-		const store = this.get('store');
+	// 	const store = this.get('store');
 
-		const preferencesPromise = store.findAll('preferences').then(preferences => {
-			return preferences;
-		}).catch(e => {
-			return null;
-		});
+	// 	const preferencesPromise = store.findAll('preferences').then(preferences => {
+	// 		return preferences;
+	// 	}).catch(e => {
+	// 		return null;
+	// 	});
 
-		return preferencesPromise.then(preferences => {
-			return { preferences };
-		});
-	}
+	// 	return preferencesPromise.then(preferences => {
+	// 		return { preferences };
+	// 	});
+	// }
 });

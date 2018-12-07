@@ -6,7 +6,11 @@
 			<div class="col s12">
 				<div style="margin-bottom: 10px;margin-top: 10px;">
 					<span style="font-size: 1.5em;">{{max.name}}</span>
-					{{materialize/material-icon icon="edit" class="right" onClick=(action editMax max)}}
+					<span class="right">
+						{{materialize/menu-icon
+							onEdit=(action editMax max)
+						}}
+					</span>
 				</div>
 			</div>
 			<div class="col s12">

@@ -7,6 +7,7 @@ export default Component.extend(ComponentValidateMixin, {
 	size: null,
 	icon: null,
 	onClick: null,
+	dataTarget: null,
 
 	init() {
 
@@ -15,6 +16,11 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	tagName: 'i',
+
+	//"dataTarget" is the name of the property on this component that we are bound to.
+	//"data-target" is the name of the attribute that will be injected onto the element.
+	attributeBindings: ['dataTarget:data-target'],
+
 	classNames: ['material-icons'],
 	classNameBindings: ['size', 'clickable'],
 

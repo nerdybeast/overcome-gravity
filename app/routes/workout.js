@@ -62,6 +62,10 @@ export default Route.extend({
 		controller.set('maxes', maxes.sortBy('name'));
 		controller.set('workouts', workouts.sortBy('name'));
 		controller.set('workoutClientId', null);
+
+		if(workout.get('isNew')) {
+			controller.set('mode', 'edit');
+		}
 	},
 
 	createWorkout() {
