@@ -29,6 +29,9 @@ export default Component.extend(ComponentValidateMixin, {
 
 	exercise: alias('exerciseSet.exercise'),
 	max: alias('exercise.max'),
+	recommendedReps: 1,
+	recommendedPercent: 50,
+	recommendedRepeatCount: 1,
 
 	maxAlreadyDetermined: computed('max', function() {
 		return !isBlank(this.max);
@@ -80,13 +83,13 @@ export default Component.extend(ComponentValidateMixin, {
 		const errors = [];
 
 		if(isBlank(this.exerciseSet.get('reps'))) {
-			errors.push('Please enter the number of reps.');
+			this.exerciseSet.set('reps', this.recommendedReps);
 		}
 
 		if(this.isPercent) {
 
 			if(isBlank(this.exerciseSet.get('percent'))) {
-				errors.push('Please enter the percent.');
+				this.exerciseSet.set('percent', this.recommendedPercent);
 			}
 	
 			if(isBlank(this.max)) {
@@ -101,7 +104,7 @@ export default Component.extend(ComponentValidateMixin, {
 		}
 		
 		if(isBlank(this.exerciseSet.get('repeatCount'))) {
-			this.exerciseSet.set('repeatCount', 1);
+			this.exerciseSet.set('repeatCount', this.recommendedRepeatCount);
 		}
 
 		if(errors.length > 0) {

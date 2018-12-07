@@ -5,7 +5,11 @@
 
 <div class="row">
 	<div class="col s12">
-		{{materialize/number-input label="Reps" value=exerciseSet.reps}}
+		{{materialize/number-input
+			label="Reps"
+			recommendedValue=recommendedReps
+			value=exerciseSet.reps
+		}}
 	</div>
 </div>
 
@@ -13,7 +17,11 @@
 
 	<div class="row">
 		<div class="col s12">
-			{{materialize/number-input label="Percent" value=exerciseSet.percent}}
+			{{materialize/number-input
+				label="Percent"
+				recommendedValue=recommendedPercent
+				value=exerciseSet.percent
+			}}
 		</div>
 
 		<div class="col s12">
@@ -28,16 +36,21 @@
 
 {{else}}
 
-	{{!-- <div class="col s12"> --}}
-		{{!materialize/number-input label="Weight" value=exerciseSet.weight}}
-	{{!-- </div> --}}
-	{{materialize/weight-input weight=weight weightType=weightType onWeightChange=(action "weightChange")}}
+	{{materialize/weight-input
+		weight=weight
+		weightType=weightType
+		onWeightChange=(action "weightChange")
+	}}
 
 {{/if}}
 
 <div class="row">
 	<div class="col s12">
-		{{materialize/number-input label="Repeat" value=exerciseSet.repeatCount}}
+		{{materialize/number-input
+			label="Repeat"
+			recommendedValue=recommendedRepeatCount
+			value=exerciseSet.repeatCount
+		}}
 	</div>
 </div>
 

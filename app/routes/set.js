@@ -40,9 +40,9 @@ export default Route.extend({
 			exerciseSet = store.createRecord('set', {
 				clientId,
 				order: exercise.get('nextSetOrderNumber'),
-				reps: previousSet.get('reps') || 1,
-				percent: previousSet.get('percent') || 50,
-				repeatCount: previousSet.get('repeatCount') || 1,
+				reps: previousSet.get('reps'),
+				percent: previousSet.get('percent'),
+				repeatCount: previousSet.get('repeatCount'),
 				kg: previousSet.get('kg') || 0,
 				lbs: previousSet.get('lbs') || 0,
 				exercise
