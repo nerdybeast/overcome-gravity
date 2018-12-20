@@ -7,7 +7,6 @@ export default Controller.extend({
 
 	queryParams: [
 		'exerciseClientId',
-		'workoutClientId',
 
 		//Not guaranteed to be passed but if coming from the exercise route, the exercise name will be passed to this max 
 		//controller so we can send it back and have the exercise controller display the correct exercise name.
@@ -15,7 +14,6 @@ export default Controller.extend({
 	],
 
 	exerciseClientId: null,
-	workoutClientId: null,
 	exerciseName: null,
 
 	max: alias('model'),
@@ -32,14 +30,17 @@ export default Controller.extend({
 		
 		complete() {
 
-			if(!isBlank(this.workoutClientId)) {
-				this.transitionToRoute('exercise', 'new', {
+			if(!isBlank(this.exerciseClientId)) {
+
+				const exercise = this.get('store').peekAll('exercise').findBy('clientId', this.exerciseClientId);
+
+				this.transitionToRoute('exercise', exercise, {
 					queryParams: {
-						workoutClientId: this.workoutClientId,
 						maxId: this.max.get('id'),
 						presetExerciseName: this.exerciseName
 					}
 				});
+
 				return;
 			}
 

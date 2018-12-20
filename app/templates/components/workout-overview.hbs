@@ -1,3 +1,12 @@
+{{#page-heading title=workout.name}}
+	<div class="right">
+		{{materialize/menu-icon 
+			onEdit=(action onEdit)
+			onDelete=(action "deleteWorkoutConfirm")
+		}}
+	</div>
+{{/page-heading}}
+
 {{#each workout.orderedExercises as |exercise|}}
 	<div class="no-fluff">
 		<div class="row title">
@@ -52,3 +61,16 @@
 		{{/each}}
 	</div>
 {{/each}}
+
+{{#confirmation-modal
+	modalId=deleteWorkoutModalId
+	onAbort=(action "cancelWorkoutDeletion")
+	onConfirm=(action "deleteWorkout")
+}}
+
+	<h6>
+		Are you sure you want to delete 
+		<strong class="blue-text">{{workout.name}}</strong>?
+	</h6>
+
+{{/confirmation-modal}}

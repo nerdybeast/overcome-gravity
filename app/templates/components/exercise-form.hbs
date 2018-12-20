@@ -1,34 +1,38 @@
 <table class="basic">
 	<tr>
+		<!-- The order number is not updating when an exercise is deleted so it skips numbers which looks weird
 		<td>
 			<span style="font-size:2.5em; position:relative; top:-5px;">
-				{{exercise.order}}.
+				{{!exercise.order}}.
 			</span>
 		</td>
+		-->
 		<td>
 			<div class="row" style="margin-bottom:0px;">
 				<div class="col s12">
-					{{materialize/input-field 
-						label="Exercise Name" 
-						value=exercise.name 
+					{{materialize/input-field
+						label="Exercise Name"
+						value=exercise.name
 						data-attr="disabled"
 					}}
 				</div>
 			</div>
 		</td>
+		<td>
+			{{materialize/material-icon
+				icon="delete"
+				class="grey-text"
+				onClick=(perform deleteSets)
+			}}
+		</td>
 	</tr>
 </table>
 
-<!--
-<div class="row">
-	<div class="col s10 m11">
-		{{!exercise.order}}. {{!exercise.name}}
+{{#if deleteSets.isRunning}}
+	<div class="progress">
+		<div class="indeterminate"></div>
 	</div>
-	<div class="col s2 m1 right-align">
-		{{!materialize/material-icon icon="more_vert"}}
-	</div>
-</div>
--->
+{{/if}}
 
 {{#if sets}}
 	<div class="row">

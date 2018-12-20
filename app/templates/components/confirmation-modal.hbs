@@ -1,0 +1,13 @@
+<div id={{modalId}} class="modal">
+	<div class="modal-content valign-wrapper center-align">
+		{{yield}}
+	</div>
+	<div class="modal-footer">
+		<button {{action onAbort}} class="btn grey darker-1">
+			<span style="margin: 0px 10px;">{{abortText}}</span>
+		</button>
+		<button {{action onConfirm}} class="btn">
+			<span style="margin: 0px 10px;">{{confirmText}}</span>
+		</button>
+	</div>
+</div>

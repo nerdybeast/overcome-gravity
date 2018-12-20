@@ -1,25 +1,35 @@
 import Controller from '@ember/controller';
 import { alias } from '@ember/object/computed';
 import { computed, observer } from '@ember/object';
-import { uuid } from 'ember-cli-uuid';
 import { isBlank } from '@ember/utils';
+import { A } from '@ember/array';
 
 export default Controller.extend({
 
-	queryParams: ['exerciseClientId', 'workoutClientId', 'maxId', 'presetExerciseName'],
+	queryParams: [
+		'exerciseClientId',
+		'workoutClientId',
+		'maxId',
+		'presetExerciseName'
+	],
+
 	exerciseClientId: null,
+
+	//Needed for when a new exercise is being created, the model hook needs to look up the workout to link the exercise to.
 	workoutClientId: null,
+
 	maxId: null,
 	presetExerciseName: null,
 
 	//Passed to the "new exercise form"
 	exerciseName: null,
 
-	workout: alias('model.workout'),
+	exercise: alias('model'),
+	workout: alias('exercise.workout'),
 	
-	//This is all exercises in the app, not just the ones related to the parent workout.
-	exercises: alias('model.exercises'),
-	maxes: alias('model.maxes'),
+	//Set in setupController, this is all exercises in the app, not just the ones related to the parent workout.
+	exercises: A(),
+	maxes: A(),
 
 	recommendedExerciseName: computed('exercises.@each.name', function() {
 		return `Exercise ${this.workout.get('exercises.length') + 1}`;
@@ -38,51 +48,43 @@ export default Controller.extend({
 		}
 	}),
 
-	transitionToWorkoutRoute() {
-
-		const workoutId = this.workout.get('id') || 'new';
-
-		const queryParams = {
-			workoutClientId: this.workout.get('clientId'),
-			mode: 'edit'
-		};
+	transitionToWorkoutRoute(workout) {
 
 		this.set('exerciseName', null);
 
-		this.transitionToRoute('workout', workoutId, { queryParams });
+		this.transitionToRoute('workout', workout, {
+			queryParams: {
+				mode: 'edit'
+			}
+		});
 	},
 
 	actions: {
 
 		addNewExercise(exerciseName, exerciseType, max) {
 
-			const store = this.get('store');
-			const clientId = uuid();
-
-			const newExercise = store.createRecord('exercise', {
-				clientId,
+			this.exercise.setProperties({
 				name: exerciseName,
 				type: exerciseType,
 				order: this.currentExerciseOrderNumber + 1,
-				workout: this.workout,
 				max
 			});
 
-			this.workout.get('exercises').pushObject(newExercise);
-			this.transitionToWorkoutRoute();
+			this.transitionToWorkoutRoute(this.workout);
 		},
 
 		cancelExercise() {
-			this.transitionToWorkoutRoute();
+			const workout = this.exercise.get('workout');
+			this.exercise.rollbackAttributes();
+			this.transitionToWorkoutRoute(workout);
 		},
 
 		addNewMax() {
 			this.transitionToRoute('max', 'new', {
 				queryParams: {
 					maxId: null,
-					exerciseClientId: this.exerciseClientId,
-					workoutClientId: this.workoutClientId,
-					exerciseName: this.exerciseName
+					exerciseClientId: this.exercise.get('clientId'),
+					exerciseName: this.exercise.get('name')
 				}
 			});
 		}

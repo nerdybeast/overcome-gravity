@@ -1,6 +1,6 @@
 //This works because we included 'node_modules/materialize-css/sass' in the sassOptions
 //in the ember-cli-build.js file.
-//@import "materialize";
+@import "materialize";
 
 body > .ember-view {
 	display: flex;
@@ -79,7 +79,7 @@ table.basic {
 }
 
 .no-fluff {
-	margin-bottom: 15px;
+	margin-bottom: 20px;
 	.row.title {
 		margin-bottom: 5px;
 		.col:first-child {
