@@ -5,15 +5,6 @@ import { uuid } from 'ember-cli-uuid';
 
 export default Route.extend({
 
-	queryParams: {
-		setClientId: {
-			refreshModel: true
-		},
-		exerciseClientId: {
-			refreshModel: true
-		}
-	},
-
 	model(params) {
 
 		const { set_id, setClientId, exerciseClientId } = params;
@@ -23,7 +14,6 @@ export default Route.extend({
 		}
 
 		const store = this.get('store');
-		const maxes  = store.peekAll('max');
 
 		let exerciseSet;
 
@@ -59,7 +49,14 @@ export default Route.extend({
 
 		}
 
-		return { exerciseSet, maxes };
-	}
+		return exerciseSet;
+	},
 
+	setupController(controller, exerciseSet) {
+
+		this._super(controller, exerciseSet);
+
+		const store = this.get('store');
+		controller.set('maxes', store.peekAll('max'));
+	}
 });

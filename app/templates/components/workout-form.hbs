@@ -18,6 +18,7 @@
 		exercise=exercise 
 		maxes=maxes 
 		goToSetRoute=(action goToSetRoute)
+		onDelete=(action "deleteExercise" exercise)
 	}}
 {{/each}}
 
@@ -59,18 +60,14 @@
 
 {{outlet}}
 
-<div id="{{cancelWorkoutModalId}}" class="modal">
-	<div class="modal-content valign-wrapper center-align">
-		<h6>
-			You have unsaved changes, are you sure you want to continue?
-		</h6>
-	</div>
-	<div class="modal-footer">
-		<button {{action "abortCancel"}} class="btn grey darker-1">
-			<span style="margin: 0px 10px;">NO</span>
-		</button>
-		<button {{action onCancelWorkout}} class="btn">
-			<span style="margin: 0px 10px;">YES</span>
-		</button>
-	</div>
-</div>
+{{#confirmation-modal
+	modalId=cancelWorkoutModalId
+	onAbort=(action "abortCancel")
+	onConfirm=(action onCancelWorkout)
+}}
+
+	<h6>
+		You have unsaved changes, are you sure you want to continue?
+	</h6>
+
+{{/confirmation-modal}}

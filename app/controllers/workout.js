@@ -5,13 +5,20 @@ import { Promise, resolve } from 'rsvp';
 
 export default Controller.extend({
 
-	queryParams: ['workoutClientId', 'mode'],
-	workoutClientId: null,
+	queryParams: ['mode'],
 	mode: null,
 
-	workout: alias('model'),
 	maxes: null,
 	workouts: null,
+	
+	workout: alias('model'),
+	exercises: alias('workout.exercises'),
+	sets: computed('exercises.[]', function() {
+		return this.exercises.reduce((sets, exercise) => {
+			exercise.get('sets').forEach(s => sets.push(s));
+			return sets;
+		}, []);
+	}),
 
 	pageTitle: computed('workout.isNew', function() {
 		return this.workout.get('isNew') ? 'Create Workout' : 'Edit Workout';
@@ -24,13 +31,32 @@ export default Controller.extend({
 		return `Workout ${numberOfDefaultWOrkouts + 1}`;
 	}),
 
+	getExercisesAndSets() {
+
+		const sets = [];
+		const exercises = [];
+
+		this.workout.get('exercises').forEach(exercise => {
+
+			exercise.get('sets').forEach(theSet => {
+				sets.push(theSet);
+			});
+
+			exercises.push(exercise);
+		});
+
+		return { sets, exercises };
+	},
+
 	actions: {
 
-		goToSetRoute(setId, setClientId, exerciseClientId) {
-			
-			setId = setId || 'unsaved';
-			
-			this.transitionToRoute(`set`, setId, {
+		goToSetRoute(setIdentifier, setClientId, exerciseClientId) {
+
+			if(typeof setIdentifier === 'string') {
+				setIdentifier = setIdentifier || 'unsaved';
+			}
+
+			this.transitionToRoute(`set`, setIdentifier, {
 				queryParams: {
 					setClientId,
 					exerciseClientId
@@ -41,14 +67,14 @@ export default Controller.extend({
 		goToExerciseRoute(exerciseId, exerciseClientId) {
 
 			exerciseId = exerciseId || 'unsaved';
-			const workoutClientId = this.workout.get('clientId');
 
 			this.transitionToRoute('exercise', exerciseId, {
 				queryParams: {
 					exerciseClientId,
-					workoutClientId,
 					maxId: null,
-					presetExerciseName: null
+					presetExerciseName: null,
+					workoutId: this.workout.get('id'),
+					workoutClientId: this.workout.get('clientId')
 				}
 			});
 		},
@@ -77,7 +103,6 @@ export default Controller.extend({
 				return Promise.all(setsSavePromises);
 
 			}).then(() => {
-				this.set('workoutClientId', null);
 				this.set('mode', null);
 				this.transitionToRoute('workout', this.workout.get('id'));
 			});
@@ -90,20 +115,10 @@ export default Controller.extend({
 
 		cancelWorkoutCreation() {
 
-			const sets = [];
-			const exercises = [];
-
 			//Need to capture this before rolling back the attributes
 			const workoutIsNew = this.workout.get('isNew');
 
-			this.workout.get('exercises').forEach(exercise => {
-
-				exercise.get('sets').forEach(theSet => {
-					sets.push(theSet);
-				});
-
-				exercises.push(exercise);
-			});
+			const { sets, exercises } = this.getExercisesAndSets();
 
 			sets.forEach(theSet => theSet.rollbackAttributes());
 			exercises.forEach(exercise => exercise.rollbackAttributes());
@@ -114,6 +129,17 @@ export default Controller.extend({
 			}
 
 			this.set('mode', null);
+		},
+
+		deleteWorkout() {
+
+			const { sets, exercises } = this.getExercisesAndSets();
+
+			return this.workout.destroyRecord().then(() => {
+				exercises.forEach(x => x.unloadRecord());
+				sets.forEach(x => x.unloadRecord());
+				this.transitionToRoute('workouts');
+			});
 		}
 	}
 });

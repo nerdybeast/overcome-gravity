@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { alias } from '@ember/object/computed';
+import { A } from '@ember/array';
 
 export default Controller.extend({
 
@@ -7,16 +8,22 @@ export default Controller.extend({
 	setClientId: null,
 	exerciseClientId: null,
 
-	exerciseSet: alias('model.exerciseSet'),
-	maxes: alias('model.maxes'),
-	workoutId: alias('exerciseSet.exercise.workout.id'),
-	workoutClientId: alias('exerciseSet.exercise.workout.clientId'),
+	exerciseSet: alias('model'),
 
-	backToWorkout(workoutId, workoutClientId) {
-		workoutId = workoutId || 'new';
-		this.transitionToRoute('workout', workoutId, {
+	//Set in setupController
+	maxes: A(),
+
+	backToWorkout(rollbackSet) {
+
+		const workout = this.exerciseSet.get('exercise.workout');
+
+		if(rollbackSet) {
+			this.exerciseSet.rollbackAttributes();
+		}
+
+		this.transitionToRoute('workout', workout, {
 			queryParams: {
-				workoutClientId
+				mode: 'edit'
 			}
 		});
 	},
@@ -24,23 +31,15 @@ export default Controller.extend({
 	actions: {
 
 		saveSet() {
-			this.backToWorkout(this.workoutId, this.workoutClientId);
+			this.backToWorkout(false);
 		},
 
 		updateSet() {
-			this.backToWorkout(this.workoutId, this.workoutClientId);
+			this.backToWorkout(false);
 		},
 
 		cancelSet() {
-
-			//Need to capture the workout id before rolling back the attributes. If the set passed to this controller
-			//is new, rolling back the attributes will delete the record thus we lose all the values on it.
-			const workoutId = this.workoutId;
-			const workoutClientId = this.workoutClientId;
-
-			this.exerciseSet.rollbackAttributes();
-
-			this.backToWorkout(workoutId, workoutClientId);
+			this.backToWorkout(true);
 		}
 	}
 

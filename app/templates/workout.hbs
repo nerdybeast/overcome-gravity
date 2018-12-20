@@ -14,16 +14,10 @@
 
 {{else}}
 
-	{{#page-heading title=workout.name}}
-		<div class="right">
-			{{materialize/menu-icon 
-				onEdit=(action "editWorkout" "edit")
-			}}
-		</div>
-	{{/page-heading}}
-
-	{{workout-overview 
+	{{workout-overview
 		workout=workout
+		onEdit=(action "editWorkout" "edit")
+		onDelete=(action "deleteWorkout")
 	}}
 
 {{/if}}

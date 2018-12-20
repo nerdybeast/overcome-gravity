@@ -3,15 +3,6 @@ import { uuid } from 'ember-cli-uuid';
 
 export default Route.extend({
 
-	queryParams: {
-		exerciseClientId: {
-			refreshModel: true
-		},
-		workoutClientId: {
-			refreshModel: true
-		}
-	},
-
 	model(params) {
 
 		const { max_id } = params;

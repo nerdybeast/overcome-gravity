@@ -6,8 +6,12 @@ module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
     sassOptions: {
       includePaths: [
-        
-        //This will allow stating @import "materialize"; in our app.scss file.
+        /**
+         * This will allow stating this in our app.scss file:
+         * ```
+         * @import "materialize";
+         * ```
+         */
         'node_modules/materialize-css/sass'
       ],
       onlyIncluded: true

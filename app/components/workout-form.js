@@ -23,6 +23,7 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	store: service('store'),
+	modal: service('modal'),
 	exercises: alias('workout.exercises'),
 
 	exercisesSortAsc: Object.freeze(['order']),
@@ -58,26 +59,9 @@ export default Component.extend(ComponentValidateMixin, {
 		return `cancel-modal-${this.get('elementId')}`;
 	}),
 
-	getModalElement(modalId) {
-		return document.getElementById(this.get(modalId));
-	},
-
-	getModalInstance(modalId) {
-		const modalElement = this.getModalElement(modalId);
-		return M.Modal.getInstance(modalElement);
-	},
-
-	openModal(modalId) {
-		this.getModalInstance(modalId).open();
-	},
-
-	closeModal(modalId) {
-		this.getModalInstance(modalId).close();
-	},
-
 	didInsertElement() {
 
-		M.Modal.init(this.getModalElement('cancelWorkoutModalId'));
+		this.modal.create(this.cancelWorkoutModalId);
 
 		const workoutNamesObject = this.store.peekAll('workout').map(wo => wo.get('name')).sort().reduce((woNamesObj, workoutName) => {
 			if(workoutName) {
@@ -92,7 +76,8 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	willDestroyElement() {
-		this.getModalInstance('cancelWorkoutModalId').destroy();
+
+		this.modal.destroy(this.cancelWorkoutModalId);
 
 		var instance = M.Autocomplete.getInstance(document.getElementById('workout-name-input'));
 		if(instance) instance.destroy();
@@ -131,10 +116,15 @@ export default Component.extend(ComponentValidateMixin, {
 			this.goToExerciseRoute(id, null);
 		},
 
+		deleteExercise(exercise) {
+			const deleteSetsPromise = exercise.get('sets').map(x => x.destroyRecord());
+			return Promise.all(deleteSetsPromise).then(() => exercise.destroyRecord());
+		},
+
 		cancelWorkoutConfirm() {
 
 			if(this.workoutIsDirty) {
-				this.openModal('cancelWorkoutModalId');
+				this.modal.open(this.cancelWorkoutModalId);
 				return;
 			}
 
@@ -142,7 +132,7 @@ export default Component.extend(ComponentValidateMixin, {
 		},
 
 		abortCancel() {
-			this.closeModal('cancelWorkoutModalId');
+			this.modal.close(this.cancelWorkoutModalId);
 		}
 	}
 });

@@ -1,36 +1,24 @@
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp';
+import { hash, resolve } from 'rsvp';
 import { uuid } from 'ember-cli-uuid';
-import { isEmpty } from '@ember/utils';
-import { resolve } from 'rsvp';
 
 export default Route.extend({
 
-	queryParams: {
-		workoutClientId: {
-			refreshModel: true
-		}
-	},
-
 	model(params) {
 
-		const { workout_id, workoutClientId } = params;
+		const { workout_id } = params;
 		const store = this.get('store');
 
 		let workoutPromise;
 
-		if(workout_id === 'new') {
+		if(workout_id === 'new' || workout_id === 'null') {
 
-			let unsavedWorkout;
-
-			if(!isEmpty(workoutClientId)) {
-				unsavedWorkout = store.peekAll('workout').findBy('clientId', workoutClientId);
-			} else {
-				unsavedWorkout = store.peekAll('workout').findBy('isNew');
-			}
+			let unsavedWorkout = store.peekAll('workout').findBy('isNew');
 
 			if(!unsavedWorkout) {
-				unsavedWorkout = this.createWorkout();
+				unsavedWorkout = store.createRecord('workout', {
+					clientId: uuid()
+				});
 			}
 
 			workoutPromise = resolve(unsavedWorkout);
@@ -39,42 +27,23 @@ export default Route.extend({
 			workoutPromise = store.findRecord('workout', workout_id);
 		}
 
-		let workouts = store.peekAll('workout');
-		let maxes = store.peekAll('max');
+		const workouts = store.findAll('workout', { reload: true });
+		const maxes = store.findAll('max', { reload: true });
 
-		if(workouts.length === 0) {
-			workouts = store.findAll('workout', { reload: true });
-		}
-
-		if(maxes.length === 0) {
-			maxes = store.findAll('max', { reload: true });
-		}
-
-		return hash({
-			maxes,
-			workouts,
-			workout: workoutPromise
-		});
+		return hash({ maxes, workouts }).then(() => workoutPromise);
 	},
 
-	setupController(controller, { maxes, workouts, workout }) {
+	setupController(controller, workout) {
+
 		this._super(controller, workout);
-		controller.set('maxes', maxes.sortBy('name'));
-		controller.set('workouts', workouts.sortBy('name'));
-		controller.set('workoutClientId', null);
+
+		const store = this.get('store');
+
+		controller.set('maxes', store.peekAll('max').sortBy('name'));
+		controller.set('workouts', store.peekAll('workout').sortBy('name'));
 
 		if(workout.get('isNew')) {
 			controller.set('mode', 'edit');
 		}
-	},
-
-	createWorkout() {
-
-		const store = this.get('store');
-		const clientId = uuid();
-
-		return store.createRecord('workout', {
-			clientId
-		});
 	}
 });
