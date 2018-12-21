@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { inject as service } from '@ember/service';
-import { equal, sort } from '@ember/object/computed';
+import { equal, sort, filterBy } from '@ember/object/computed';
 import { task } from 'ember-concurrency';
 
 export default Component.extend(ComponentValidateMixin, {
@@ -26,6 +26,8 @@ export default Component.extend(ComponentValidateMixin, {
 	setSortingAsc: Object.freeze(['order']),
 	sets: sort('exercise.sets', 'setSortingAsc'),
 
+	nonDeletedSets: filterBy('sets', 'isDeleted', false),
+
 	deleteSets: task(function * () {
 		yield this.onDelete();
 	}).drop(),
@@ -41,7 +43,7 @@ export default Component.extend(ComponentValidateMixin, {
 		},
 
 		deleteSet(theSet) {
-			return theSet.destroyRecord();
+			return theSet.deleteRecord();
 		}
 	}
 });

@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import { alias, sort } from '@ember/object/computed';
+import { alias, sort, filterBy } from '@ember/object/computed';
 import { isBlank } from '@ember/utils';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { inject as service } from '@ember/service';
@@ -26,8 +26,10 @@ export default Component.extend(ComponentValidateMixin, {
 	modal: service('modal'),
 	exercises: alias('workout.exercises'),
 
+	nonDeletedExercises: filterBy('exercises', 'isDeleted', false),
+
 	exercisesSortAsc: Object.freeze(['order']),
-	sortedExercises: sort('exercises', 'exercisesSortAsc'),
+	sortedExercises: sort('nonDeletedExercises', 'exercisesSortAsc'),
 
 	workoutIsDirty: computed('workout', function() {
 
@@ -117,8 +119,8 @@ export default Component.extend(ComponentValidateMixin, {
 		},
 
 		deleteExercise(exercise) {
-			const deleteSetsPromise = exercise.get('sets').map(x => x.destroyRecord());
-			return Promise.all(deleteSetsPromise).then(() => exercise.destroyRecord());
+			exercise.get('sets').map(x => x.deleteRecord());
+			exercise.deleteRecord();
 		},
 
 		cancelWorkoutConfirm() {

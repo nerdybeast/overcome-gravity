@@ -34,7 +34,7 @@
 	</div>
 {{/if}}
 
-{{#if sets}}
+{{#if nonDeletedSets}}
 	<div class="row">
 		<div class="col s12">
 			<table class="centered">
@@ -51,7 +51,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				{{#each sets as |exerciseSet|}}
+				{{#each nonDeletedSets as |exerciseSet|}}
 					<tr>
 						<td>{{exerciseSet.reps}}</td>
 						<td>{{exerciseSet.weight.kg}} / {{exerciseSet.weight.lbs}}</td>
