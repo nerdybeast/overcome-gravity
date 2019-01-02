@@ -11,15 +11,6 @@ export default Component.extend({
 	step: 1,
 	onChange: null,
 
-	// init() {
-
-	// 	this._super(...arguments);
-
-	// 	if(isBlank(this.get('value'))) {
-	// 		this.set('value', 0);
-	// 	}
-	// },
-
 	actions: {
 
 		increaseCount() {

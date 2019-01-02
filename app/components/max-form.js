@@ -10,6 +10,7 @@ export default Component.extend(ComponentValidateMixin, {
 
 	store: service('store'),
 
+	weight: null,
 	max: null,
 	isCompact: false,
 	onSave: null,
@@ -44,7 +45,13 @@ export default Component.extend(ComponentValidateMixin, {
 		//TODO: Get from user's preferences...
 		const isKG = true;
 
-		const weight = isKG ? this.max.get('kg') : this.max.get('lbs');
+		let weight = isKG ? this.max.get('kg') : this.max.get('lbs');
+
+		//Set the weight to null so that the input has a "blank" value instead of a 0 so that when the user
+		//focuses on the input, they don't have to delete the 0 in order to set a value.
+		if(this.max.get('isNew') && weight === 0) {
+			weight = null;
+		}
 
 		this.set('weight', weight);
 	},
@@ -86,39 +93,34 @@ export default Component.extend(ComponentValidateMixin, {
 		return { hasError, message };
 	},
 
-	validateWeightField(val) {
-
-		const hasError = isBlank(val);
-		const message = hasError ? 'Weight is required' : null;
-
-		return { hasError, message };
+	maxWeightChange(kg, lbs) {
+		this.max.setProperties({ kg, lbs });
 	},
 
 	saveMax: task(function * () {
 
 		try {
 
-			const max = this.get('max');
+			if(isBlank(this.weight)) {
+				this.maxWeightChange(0, 0);
+			}
+
 			const validations = [];
 
-			const nameValidation = this.validateNameField(max.get('name'));
-			const weightValidation = this.validateWeightField(this.get('weight'));
+			const nameValidation = this.validateNameField(this.max.get('name'));
 
 			validations.push(nameValidation);
-			validations.push(weightValidation);
 
 			this.setProperties({
 				nameHasError: nameValidation.hasError,
 				nameErrorMessage: nameValidation.message,
-				weightHasError: weightValidation.hasError,
-				weightErrorMessage: weightValidation.message
 			});
 
 			if(validations.any(x => x.hasError)) {
 				return;
 			}
 
-			yield this.onSave(max);
+			yield this.onSave(this.max);
 			yield this.onComplete();
 
 		} catch(error) {
@@ -144,7 +146,7 @@ export default Component.extend(ComponentValidateMixin, {
 		},
 
 		maxLiftWeightChange({ kg, lbs }) {
-			this.get('max').setProperties({ kg, lbs });
+			this.maxWeightChange(kg, lbs);
 		}
 	}
 });
