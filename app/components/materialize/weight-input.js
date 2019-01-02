@@ -21,8 +21,8 @@ export default Component.extend(ComponentValidateMixin, {
 
 		let { weight, isKG } = this.getProperties('weight', 'isKG');
 
-		let kg = null;
-		let lbs = null;
+		let kg = 0;
+		let lbs = 0;
 
 		if(weight) {
 			weight = Number(weight);

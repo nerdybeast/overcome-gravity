@@ -46,7 +46,15 @@ export default Component.extend(ComponentValidateMixin, {
 			return this.max.get(this.weightType);
 		}
 
-		return this.exerciseSet.get(this.weightType) || 0;
+		let weightAmount = this.exerciseSet.get(this.weightType) || 0;
+
+		//Set the weight to null so that the input has a "blank" value instead of a 0 so that when the user
+		//focuses on the input, they don't have to delete the 0 in order to set a value.
+		if(this.exerciseSet.get('isNew') && weightAmount === 0) {
+			weightAmount = null;
+		}
+
+		return weightAmount;
 	}),
 
 	maxesOptions: computed('maxes.[]', 'activeMaxId', 'maxAlreadyDetermined', function() {
@@ -96,11 +104,6 @@ export default Component.extend(ComponentValidateMixin, {
 				errors.push('Please enter a max.');
 			}
 
-		} else {
-
-			if(isBlank(this.weight)) {
-				errors.push('Please enter the weight.');
-			}
 		}
 		
 		if(isBlank(this.exerciseSet.get('repeatCount'))) {
