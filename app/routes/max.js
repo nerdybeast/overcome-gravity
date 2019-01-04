@@ -17,7 +17,7 @@ export default Route.extend({
 			});
 		}
 
-		return this.get('store').peekRecord('max', max_id);
+		return this.get('store').findRecord('max', max_id);
 	}
 
 });

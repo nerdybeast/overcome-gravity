@@ -12,6 +12,7 @@ export default Component.extend(ComponentValidateMixin, {
 
 	weight: null,
 	max: null,
+	recommendedReps: 1,
 	isCompact: false,
 	onSave: null,
 	onComplete: null,
@@ -105,6 +106,10 @@ export default Component.extend(ComponentValidateMixin, {
 				this.maxWeightChange(0, 0);
 			}
 
+			if(isBlank(this.max.get('reps'))) {
+				this.max.set('reps', this.recommendedReps);
+			}
+
 			const validations = [];
 
 			const nameValidation = this.validateNameField(this.max.get('name'));
@@ -130,6 +135,11 @@ export default Component.extend(ComponentValidateMixin, {
 	}).drop(), //drop prevents firing this function if it's already running, i.e. prevents double button clicks
 
 	actions: {
+
+		cancel() {
+			this.max.rollbackAttributes();
+			this.onCancel();
+		},
 
 		weightTypeChange(weightType) {
 			this.set('weightType', weightType);

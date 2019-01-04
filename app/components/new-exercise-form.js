@@ -9,6 +9,8 @@ export default Component.extend(ComponentValidateMixin, {
 
 	exerciseName: null,
 	recommendedExerciseName: null,
+	workout: null,
+	defaultWorkoutName: null,
 	selectedMaxId: null,
 	exerciseType: 'percent',
 	maxes: null,
@@ -32,6 +34,10 @@ export default Component.extend(ComponentValidateMixin, {
 
 	defaultExerciseName: computed('recommendedExerciseName', 'selectedMax', 'isPercentBasedExercise', function() {
 		return this.selectedMax !== null && this.isPercentBasedExercise ? this.selectedMax.get('name') : this.recommendedExerciseName;
+	}),
+
+	title: computed('workout.name', 'recommendedExerciseName', 'defaultWorkoutName', function() {
+		return `${this.workout.get('name') || this.defaultWorkoutName} - ${this.recommendedExerciseName}`;
 	}),
 
 	onAutocomplete(exerciseName) {

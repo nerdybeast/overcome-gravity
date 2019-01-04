@@ -4,6 +4,7 @@ import mixin from 'overcome-gravity/mixins/component-validator-mixin';
 export default Component.extend(mixin, {
 
 	title: null,
+	subTitle: null,
 	bottomMargin: true,
 
 	init() {

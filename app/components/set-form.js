@@ -9,6 +9,7 @@ import { alias, equal } from '@ember/object/computed';
 export default Component.extend(ComponentValidateMixin, {
 
 	exerciseSet: null,
+	exerciseName: null,
 	maxes: null,
 	activeMaxId: null,
 	weightType: 'kg',
@@ -33,8 +34,12 @@ export default Component.extend(ComponentValidateMixin, {
 	recommendedPercent: 50,
 	recommendedRepeatCount: 1,
 
-	maxAlreadyDetermined: computed('max', function() {
-		return !isBlank(this.max);
+	setFormTitle: computed('exerciseName', 'exerciseSet.order', function() {
+		return `${this.exerciseName} - Set ${this.exerciseSet.get('order')}`;
+	}),
+
+	setFormSubTitle: computed('isPercent', function() {
+		return this.isPercent ? `Of ${this.max.get('name')} max` : null;
 	}),
 
 	isPercent: equal('exercise.type', 'percent'),
@@ -55,35 +60,6 @@ export default Component.extend(ComponentValidateMixin, {
 		}
 
 		return weightAmount;
-	}),
-
-	maxesOptions: computed('maxes.[]', 'activeMaxId', 'maxAlreadyDetermined', function() {
-
-		if(this.maxAlreadyDetermined) {
-
-			return [SelectInputOption.create({
-				value: this.max.get('id'),
-				label: this.max.get('name'),
-				selected: true,
-				disabled: true
-			})];
-		}
-
-		const maxes = this.maxes.map(max => {
-			return SelectInputOption.create({
-				value: max.id,
-				label: max.name,
-				selected: max.id === this.activeMaxId
-			});
-		});
-
-		const readOnlyOption = SelectInputOption.create({
-			label: 'Choose a max',
-			disabled: true,
-			selected: this.activeMaxId === null
-		});
-
-		return [readOnlyOption, ...maxes];
 	}),
 
 	isValid() {
@@ -127,10 +103,6 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	actions: {
-
-		changeMaxOnSet(maxId) {
-			this.exerciseSet.set('max', this.get('maxes').findBy('id', maxId));
-		},
 
 		onSaveSet() {
 

@@ -57,6 +57,9 @@ export default Route.extend({
 		this._super(controller, exerciseSet);
 
 		const store = this.get('store');
+		const exerciseController = this.controllerFor('exercise');
+
 		controller.set('maxes', store.peekAll('max'));
+		controller.set('exerciseName', exerciseSet.get('exercise.name') || exerciseController.get('defaultExerciseName'));
 	}
 });
