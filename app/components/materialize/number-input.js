@@ -4,9 +4,10 @@ import { isBlank } from '@ember/utils';
 export default Component.extend({
 
 	label: 'Enter',
+	helpText: null,
 	recommendedValue: 0,
 	value: null,
-	min: null,
+	min: 0,
 	max: null,
 	step: 1,
 	onChange: null,
@@ -21,7 +22,7 @@ export default Component.extend({
 
 		decreaseCount() {
 			this.ensureValueIsSet();
-			if(this.value === 0) return;
+			if(this.value === this.min) return;
 			this.decrementProperty('value');
 			this.notifyOfChange();
 		}

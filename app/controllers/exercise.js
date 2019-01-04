@@ -24,6 +24,9 @@ export default Controller.extend({
 	//Passed to the "new exercise form"
 	exerciseName: null,
 
+	//Set in setupController
+	defaultWorkoutName: null,
+
 	exercise: alias('model'),
 	workout: alias('exercise.workout'),
 	
@@ -32,7 +35,7 @@ export default Controller.extend({
 	maxes: A(),
 
 	recommendedExerciseName: computed('exercises.@each.name', function() {
-		return `Exercise ${this.workout.get('exercises.length') + 1}`;
+		return `Exercise ${this.workout.get('exercises.length')}`;
 	}),
 
 	currentExerciseOrderNumber: computed('workout.exercises.[]', function() {

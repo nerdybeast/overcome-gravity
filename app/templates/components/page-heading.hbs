@@ -1,11 +1,15 @@
 <div class="valign-wrapper">
 	<div class="full-width">
-		<span class="blue-grey-text" style="font-size:2em;">{{title}}</span>
+		<span class="blue-grey-text" style="font-size:1.5em;">{{title}}</span>
 	</div>
 	{{yield}}
 </div>
 
 <div class="divider"></div>
+
+{{#if subTitle}}
+	{{subTitle}}
+{{/if}}
 
 {{!-- Just a way to provide a consistent margin for the content below this heading --}}
 {{#if bottomMargin}}

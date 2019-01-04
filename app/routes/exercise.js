@@ -52,7 +52,10 @@ export default Route.extend({
 		this._super(controller, exercise);
 
 		const store = this.get('store');
+		const workoutController = this.controllerFor('workout');
+
 		controller.set('exercises', store.peekAll('exercise'));
 		controller.set('maxes', store.peekAll('max'));
+		controller.set('defaultWorkoutName', workoutController.get('defaultWorkoutName'));
 	}
 });

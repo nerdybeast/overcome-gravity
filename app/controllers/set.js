@@ -8,6 +8,9 @@ export default Controller.extend({
 	setClientId: null,
 	exerciseClientId: null,
 
+	//Set in setupController
+	exerciseName: null,
+
 	exerciseSet: alias('model'),
 
 	//Set in setupController

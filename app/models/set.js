@@ -23,8 +23,20 @@ export default DS.Model.extend({
 		switch(type) {
 			case 'percent': {
 
-				const calculatedLBS = Math.round(max.get('lbs') * (percent / 100));
-				const calculatedKG = Math.round(max.get('kg') * (percent / 100));
+				let maxLbs = max.get('lbs');
+				let maxKg = max.get('kg');
+				const maxReps = max.getWithDefault('reps', 1);
+
+				if(maxReps !== 1) {
+					//https://en.wikipedia.org/wiki/One-repetition_maximum
+					const brzyckiFormula = (weight, reps) => weight / (1.0278 - (.0278 * reps));
+					const epleyFormula = (weight, reps) => weight * (1 + (reps / 30)); 
+					maxLbs = epleyFormula(maxLbs, maxReps);
+					maxKg = epleyFormula(maxKg, maxReps);
+				}
+
+				const calculatedLBS = Math.round(maxLbs * (percent / 100));
+				const calculatedKG = Math.round(maxKg * (percent / 100));
 
 				return {
 					kg: calculatedKG,

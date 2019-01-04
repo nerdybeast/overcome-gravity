@@ -1,7 +1,6 @@
-<div class="row">
-	<h5>Set {{exerciseSet.order}}</h5>
-	<div class="divider"></div>
-</div>
+{{page-heading
+	title=setFormTitle
+}}
 
 <div class="row">
 	<div class="col s12">
@@ -23,14 +22,8 @@
 				value=exerciseSet.percent
 			}}
 		</div>
-
 		<div class="col s12">
-			{{materialize/select-input
-				label="of what Max"
-				options=maxesOptions
-				disabled=maxAlreadyDetermined
-				onChange=(action "changeMaxOnSet")
-			}}
+			{{setFormSubTitle}}
 		</div>
 	</div>
 
