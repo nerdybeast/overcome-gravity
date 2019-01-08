@@ -38,5 +38,7 @@ module.exports = function(defaults) {
   app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf');
   app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff');
 
+  app.import('node_modules/auth0-js/build/auth0.js');
+
   return app.toTree();
 };

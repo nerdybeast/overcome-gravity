@@ -1,0 +1,86 @@
+import Service from '@ember/service';
+import { computed } from '@ember/object';
+import ENV from 'overcome-gravity/config/environment';
+
+export default Service.extend({
+
+    user: null,
+
+    auth0: computed(function () {
+        return new auth0.WebAuth({
+            // setting up the config file will be covered below
+            domain: ENV.AUTH0_DOMAIN, // domain from auth0
+            clientID: ENV.AUTH0_CLIENT_ID, // clientId from auth0
+            redirectUri: ENV.AUTH0_CALLBACK_URL,
+            audience: `https://${ENV.AUTH0_DOMAIN}/userinfo`,
+            responseType: 'token',
+            scope: 'openid profile' // adding profile because we want username, given_name, etc
+        });
+    }),
+
+    /**
+     * Send a user over to the hosted auth0 login page
+     */
+    login() {
+        return this.get('auth0').authorize();
+    },
+
+    /**
+     * When a user lands back on our application
+     * Parse the hash and store user info
+     */
+    handleAuthentication() {
+        return new Promise((resolve) => {
+            this.get('auth0').parseHash((err, authResult) => {
+            if (err) return false;
+
+            if (authResult && authResult.accessToken) {
+                this.setUser(authResult.accessToken);
+            }
+
+            return resolve();
+            });
+        });
+    },
+
+    /**
+     * Computed to tell if a user is logged in or not
+     * @return boolean
+     */
+    isAuthenticated: computed(function() {    
+        return this.get('checkLogin');
+    }), 
+
+    /**
+     * Use the token to set our user
+     */
+    setUser(token) {
+        // once we have a token, we are able to go get the users information
+        this.get('auth0').client.userInfo(token, (err, profile) => {
+            if(err) throw err;
+            this.set('user', profile);
+        });
+    },
+
+    /**
+     * Check if we are authenticated using the auth0 library's checkSession
+     */
+    checkLogin() {
+        // check to see if a user is authenticated, we'll get a token back
+        this.get('auth0').checkSession({}, (err, authResult) => {
+            // if we are wrong, stop everything now
+            if (err) return err;
+            this.setUser(authResult.accessToken);
+        });
+    }, 
+
+    /**
+     * Get rid of everything in sessionStorage that identifies this user
+     */
+    logout() {
+        this.get('auth0').logout({
+            clientID: ENV.AUTH0_CLIENT_ID,
+            returnTo: 'http://localhost:4200'
+        });
+    }
+});

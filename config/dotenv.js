@@ -2,7 +2,12 @@ module.exports = function(env) {
 
 	return {
 
-		clientAllowedKeys: ['OVERCOME_GRAVITY_API'],
+		clientAllowedKeys: [
+			'OVERCOME_GRAVITY_API',
+			'AUTH0_DOMAIN',
+			'AUTH0_CLIENT_ID',
+			'AUTH0_CALLBACK_URL'
+		],
 
 		// Fail build when there is missing any of clientAllowedKeys environment variables.
 		// By default false.

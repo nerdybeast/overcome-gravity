@@ -53,6 +53,9 @@ module.exports = function(environment) {
   }
 
   ENV.OVERCOME_GRAVITY_API = process.env.OVERCOME_GRAVITY_API;
+  ENV.AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
+  ENV.AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+  ENV.AUTH0_CALLBACK_URL = process.env.AUTH0_CALLBACK_URL;
 
   return ENV;
 };
