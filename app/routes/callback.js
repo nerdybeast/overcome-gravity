@@ -3,10 +3,10 @@ import { inject as service } from '@ember/service';
 
 export default Route.extend({
 
-    auth: service('auth'),
+	auth: service('auth'),
 
-    beforeModel() {
-        return this.auth.handleAuthentication().then(() => this.transitionTo('index'));
-    }
+	beforeModel() {
+		return this.auth.handleAuthentication().then(() => this.transitionTo('workouts'));
+	}
 
 });

@@ -16,6 +16,17 @@ export default Service.extend({
 		}
 
 		return trialUserId;
-	})
+	}),
 
+	setItem(key, val) {
+		window.localStorage.setItem(key, JSON.stringify(val));
+	},
+
+	getItem(key) {
+		return JSON.parse(window.localStorage.getItem(key));
+	},
+
+	removeItem(key) {
+		window.localStorage.removeItem(key);
+	}
 });

@@ -1,4 +1,6 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
+import { reject } from 'rsvp';
 import preferences from '../models/preferences';
 // import { uuid } from 'ember-cli-uuid';
 
@@ -97,4 +99,6 @@ export default Route.extend({
 	// 		return { preferences };
 	// 	});
 	// }
+
+	
 });

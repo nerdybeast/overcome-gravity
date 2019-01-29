@@ -40,5 +40,8 @@ module.exports = function(defaults) {
 
   app.import('node_modules/auth0-js/build/auth0.js');
 
+  //This is available because we ran `ember generate vendor-shim auth0`
+  app.import('vendor/shims/auth0.js');
+
   return app.toTree();
 };

@@ -5,14 +5,14 @@ import { computed } from '@ember/object';
 
 export default DS.JSONAPIAdapter.extend({
 
-	localStorage: service('local-storage'),
+	auth: service('auth'),
 
 	host: ENV.OVERCOME_GRAVITY_API,
 
 	//This has to be a computed property, ember will not call it as a function
 	headers: computed(function() {
 		return {
-			userid: this.localStorage.get('trialUserId')
+			userid: this.auth.get('user.id')
 		}
 	})
 });

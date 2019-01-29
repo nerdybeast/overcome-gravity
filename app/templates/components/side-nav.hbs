@@ -5,10 +5,19 @@
 		<div class="background">
 			<img src="/images/athlete-barbell-bodybuilder-949129_600x400.jpg" alt="Athlete Barbell Bodybuilder" class="responsive-image" />
 		</div>
-		<div style="height: 100px;"></div>
-		<div>
-			<span class="white-text" style="font-weight: bold; font-size: 1.5em;">Overcome Gravity</span>
-		</div>
+		{{#if auth.isAuthenticated}}
+			<div class="center-align">
+				<div>
+					<img width="100" height="100" src={{auth.user.picture}} />
+				</div>
+				<span class="white-text" style="font-weight: bold; font-size: 1.5em;">{{auth.user.name}}</span>
+			</div>
+		{{else}}
+			<div style="height: 100px;"></div>
+			<div>
+				<span class="white-text" style="font-weight: bold; font-size: 1.5em;">Overcome Gravity</span>
+			</div>
+		{{/if}}
 	</div>
 </li>
 <li>
@@ -26,6 +35,15 @@
 <li>
 	{{link-to "Max Lifts" "maxes" class="sidenav-close"}}
 </li>
+
+{{#if auth.isAuthenticated}}
+	<li>
+		<div class="divider"></div>
+	</li>
+	<li>
+		<a {{action "logout"}} style="cursor:pointer;">Logout</a>
+	</li>
+{{/if}}
 
 {{!--
 
