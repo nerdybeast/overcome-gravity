@@ -2,6 +2,12 @@
 	title=setFormTitle
 }}
 
+{{#if isPercent}}
+	<div class="grey-text right-align">
+		Max: {{link-to max.name 'max' max}} {{oneRepMaxAmount}}
+	</div>
+{{/if}}
+
 <div class="row">
 	<div class="col s12">
 		{{materialize/number-input
@@ -21,9 +27,6 @@
 				recommendedValue=recommendedPercent
 				value=exerciseSet.percent
 			}}
-		</div>
-		<div class="col s12">
-			{{setFormSubTitle}}
 		</div>
 	</div>
 

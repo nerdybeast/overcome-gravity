@@ -1,8 +1,12 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { equal, alias } from '@ember/object/computed';
+import { inject as service } from '@ember/service';
 
 export default DS.Model.extend({
+
+	formula: service('formula'),
+
 	clientId: DS.attr('string'),
 	order: DS.attr('number'),
 	reps: DS.attr('number'),
@@ -28,11 +32,8 @@ export default DS.Model.extend({
 				const maxReps = max.getWithDefault('reps', 1);
 
 				if(maxReps !== 1) {
-					//https://en.wikipedia.org/wiki/One-repetition_maximum
-					const brzyckiFormula = (weight, reps) => weight / (1.0278 - (.0278 * reps));
-					const epleyFormula = (weight, reps) => weight * (1 + (reps / 30)); 
-					maxLbs = epleyFormula(maxLbs, maxReps);
-					maxKg = epleyFormula(maxKg, maxReps);
+					maxLbs = this.formula.epley1RepMax(maxLbs, maxReps);
+					maxKg = this.formula.epley1RepMax(maxKg, maxReps);
 				}
 
 				const calculatedLBS = Math.round(maxLbs * (percent / 100));
