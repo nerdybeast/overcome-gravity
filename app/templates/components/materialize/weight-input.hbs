@@ -8,26 +8,17 @@
 </div>
 
 {{!-- DO NOT PUT ACTIONS ON THESE INPUTS, IT BREAKS MATERIALIZE --}}
-{{#materialize/radio-input inputName="weight-type" onChange=(action "weightTypeChange")}}
+{{#materialize/radio-input onChange=(action "weightTypeChange") inputName="weight-type" as |name|}}
 	<div class="row">
 		<div class="col">
 			<label for="weight-kg">
-				{{!-- TODO: The weight type to default to here needs to be configed based on the user's choice --}}
-				{{#if isKG}}
-					<input name="weight-type" type="radio" id="weight-kg" value="kg" checked />
-				{{else}}
-					<input name="weight-type" type="radio" id="weight-kg" value="kg" />
-				{{/if}}
+				{{materialize/radio-input-element id="weight-kg" name=name value="kg" checked=isKG}}
 				<span>KG</span>
 			</label>
 		</div>
 		<div class="col">
 			<label for="weight-lbs">
-				{{#if isKG}}
-					<input name="weight-type" type="radio" id="weight-lbs" value="lbs" />
-				{{else}}
-					<input name="weight-type" type="radio" id="weight-lbs" value="lbs" checked />
-				{{/if}}
+				{{materialize/radio-input-element id="weight-lbs" name=name value="lbs" checked=isLBS}}
 				<span>LBS</span>
 			</label>
 		</div>

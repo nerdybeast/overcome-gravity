@@ -5,10 +5,13 @@ import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-
 import { isBlank } from '@ember/utils';
 import { reject, resolve } from 'rsvp';
 import { task } from 'ember-concurrency';
+import { computed } from '@ember/object';
+import { gt } from '@ember/object/computed';
 
 export default Component.extend(ComponentValidateMixin, {
 
 	store: service('store'),
+	formula: service('formula'),
 
 	weight: null,
 	max: null,
@@ -35,6 +38,14 @@ export default Component.extend(ComponentValidateMixin, {
 	triggerNameValidation: 0,
 	nameHasError: false,
 	nameErrorMessage: null,
+
+	isMoreThanOneRep: gt('max.reps', 1),
+
+	estimatedOneRepMax: computed('weight', 'max.reps', function() {
+		const weight = this.get('weight');
+		const reps = this.get('max.reps');
+		return Math.round(this.formula.epley1RepMax(weight, reps));
+	}),
 
 	validateFieldHasValue(val) {
 		if(isBlank(val)) return reject('A value is required.');
