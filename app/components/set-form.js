@@ -1,10 +1,10 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import SelectInputOption from 'overcome-gravity/models/objects/select-input-option';
 import ComponentValidateMixin from 'overcome-gravity/mixins/component-validator-mixin';
 import { isBlank } from '@ember/utils';
 import M from 'materialize-css';
 import { alias, equal } from '@ember/object/computed';
+import { inject as service } from '@ember/service';
 
 export default Component.extend(ComponentValidateMixin, {
 
@@ -28,6 +28,8 @@ export default Component.extend(ComponentValidateMixin, {
 		}
 	},
 
+	formula: service('formula'),
+
 	exercise: alias('exerciseSet.exercise'),
 	max: alias('exercise.max'),
 	recommendedReps: 1,
@@ -36,10 +38,6 @@ export default Component.extend(ComponentValidateMixin, {
 
 	setFormTitle: computed('exerciseName', 'exerciseSet.order', function() {
 		return `${this.exerciseName} - Set ${this.exerciseSet.get('order')}`;
-	}),
-
-	setFormSubTitle: computed('isPercent', function() {
-		return this.isPercent ? `Of ${this.max.get('name')} max` : null;
 	}),
 
 	isPercent: equal('exercise.type', 'percent'),
@@ -60,6 +58,13 @@ export default Component.extend(ComponentValidateMixin, {
 		}
 
 		return weightAmount;
+	}),
+
+	oneRepMaxAmount: computed('max', 'weight', function() {
+		const { max, weight } = this.getProperties('max', 'weight');
+		const isMultiRepMax = max.get('isMultiRepMax');
+		const maxAmount = isMultiRepMax ? Math.round(this.formula.epley1RepMax(weight, max.get('reps'))) : weight;
+		return `${maxAmount}${this.weightType}${isMultiRepMax ? ' (est.)' : ''}`;
 	}),
 
 	isValid() {

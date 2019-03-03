@@ -12,14 +12,15 @@
 </div>
 
 <div class="row">
-	{{materialize/weight-input 
-		weight=weight 
-		weightType=weightType 
+	{{materialize/weight-input
+		weight=weight
+		weightType=weightType
 		onWeightChange=(action "maxLiftWeightChange")
+		onWeightTypeChange=(action "weightTypeChange")
 	}}
 </div>
 
-<div class="row">
+<div class="row no-bottom-padding">
 	<div class="col s12">
 		{{materialize/number-input
 			label="For how many reps"
@@ -32,6 +33,13 @@
 </div>
 
 <div class="row">
+	<div class="col s12 grey-text">
+		{{#if isMoreThanOneRep}}
+			Estimated 1 rep max: {{estimatedOneRepMax}}{{weightType}}
+		{{else}}
+			&nbsp;
+		{{/if}}
+	</div>
 	{{#if saveMax.isRunning}}
 		<div class="col s12">
 			<div class="progress">
@@ -40,6 +48,8 @@
 		</div>
 	{{/if}}
 </div>
+
+<div class="row"></div>
 
 {{#if isCompact}}
 

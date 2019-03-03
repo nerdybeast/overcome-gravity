@@ -9,6 +9,7 @@ export default Component.extend(ComponentValidateMixin, {
 	weight: null,
 	weightType: null,
 	onWeightChange: null,
+	onWeightTypeChange: null,
 
 	init() {
 		this._super(...arguments);
@@ -16,6 +17,7 @@ export default Component.extend(ComponentValidateMixin, {
 	},
 
 	isKG: equal('weightType', 'kg'),
+	isLBS: equal('weightType', 'lbs'),
 
 	weightChangeObserver: observer('weight', 'isKG', function() {
 
@@ -37,7 +39,8 @@ export default Component.extend(ComponentValidateMixin, {
 
 		weightTypeChange(weightType) {
 
-			this.set('weightType', weightType);
+			//this.set('weightType', weightType);
+			this.onWeightTypeChange(weightType);
 
 			//Only calling this to make sure the computed property will be updated.
 			this.get('isKG');
