@@ -17,7 +17,7 @@
     "test": "ember test"
   },
   "devDependencies": {
-    "@types/materialize-css": "^1.0.4",
+    "@types/materialize-css": "^1.0.6",
     "broccoli-asset-rev": "^2.7.0",
     "ember-ajax": "^3.0.0",
     "ember-auto-import": "^1.2.5",
@@ -44,7 +44,6 @@
     "ember-model-validator": "^3.4.0",
     "ember-resolver": "^4.0.0",
     "ember-source": "~3.3.0",
-    "ember-welcome-page": "^3.0.0",
     "eslint-plugin-ember": "^5.0.0",
     "loader.js": "^4.2.3",
     "qunit-dom": "^0.6.2"
@@ -53,7 +52,6 @@
     "node": "6.* || 8.* || >= 10.*"
   },
   "dependencies": {
-    "material-design-icons": "^3.0.1",
-    "materialize-css": "^1.0.0-rc.2"
+    "materialize-css": "^1.0.0"
   }
 }

@@ -15,6 +15,9 @@ module.exports = function(defaults) {
         'node_modules/materialize-css/sass'
       ],
       onlyIncluded: true
+    },
+    babel: {
+      sourceMaps: 'inline'
     }
   });
 
@@ -33,10 +36,6 @@ module.exports = function(defaults) {
 
   app.import('node_modules/materialize-css/dist/js/materialize.min.js');
   app.import('node_modules/materialize-css/dist/css/materialize.min.css');
-  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.eot');
-  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.svg');
-  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf');
-  app.import('node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff');
 
   return app.toTree();
 };
