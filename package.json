@@ -20,7 +20,7 @@
     "@types/materialize-css": "^1.0.6",
     "broccoli-asset-rev": "^2.7.0",
     "ember-ajax": "^3.0.0",
-    "ember-auto-import": "^1.2.5",
+    "ember-auto-import": "^1.2.21",
     "ember-cli": "~3.3.0",
     "ember-cli-app-version": "^3.0.0",
     "ember-cli-babel": "^6.6.0",
