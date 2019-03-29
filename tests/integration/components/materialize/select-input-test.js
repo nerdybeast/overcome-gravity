@@ -12,7 +12,7 @@ module('Integration | Component | materialize/select-input', function(hooks) {
 
     await render(hbs`{{materialize/select-input}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom(this.element).hasText('');
 
     // Template block usage:
     await render(hbs`
@@ -21,6 +21,6 @@ module('Integration | Component | materialize/select-input', function(hooks) {
       {{/materialize/select-input}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom(this.element).hasText('template block text');
   });
 });
