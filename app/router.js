@@ -13,6 +13,8 @@ Router.map(function() {
   this.route('workout', { path: '/workout/:workout_id' });
   this.route('set', { path: '/set/:set_id' });
   this.route('exercise', { path: '/exercise/:exercise_id' });
+  this.route('preferences');
+  this.route('home');
 });
 
 export default Router;

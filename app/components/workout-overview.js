@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 export default Component.extend(ComponentValidateMixin, {
 
 	workout: null,
+	preferences: null,
 	onEdit: null,
 	onDelete: null,
 

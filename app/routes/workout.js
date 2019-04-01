@@ -37,10 +37,9 @@ export default Route.extend({
 
 		this._super(controller, workout);
 
-		const store = this.get('store');
-
-		controller.set('maxes', store.peekAll('max').sortBy('name'));
-		controller.set('workouts', store.peekAll('workout').sortBy('name'));
+		controller.set('maxes', this.store.peekAll('max').sortBy('name'));
+		controller.set('workouts', this.store.peekAll('workout').sortBy('name'));
+		controller.set('preferences', this.modelFor('application').preferences);
 
 		if(workout.get('isNew')) {
 			controller.set('mode', 'edit');

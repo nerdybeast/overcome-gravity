@@ -1,0 +1,32 @@
+{{page-heading
+	title="Preferences"
+}}
+
+<div class="row">
+	<div class="col s12">
+		Weight type to display
+	</div>
+</div>
+
+{{#materialize/radio-input onChange=(action "weightTypeChange") inputName="weight-type" as |name|}}
+	<div class="row">
+		<div class="col">
+			<label for="weight-kg">
+				{{materialize/radio-input-element id="weight-kg" name=name value="kg" checked=isKG}}
+				<span>KG</span>
+			</label>
+		</div>
+		<div class="col">
+			<label for="weight-lbs">
+				{{materialize/radio-input-element id="weight-lbs" name=name value="lbs" checked=isLBS}}
+				<span>LBS</span>
+			</label>
+		</div>
+		<div class="col">
+			<label for="weight-both">
+				{{materialize/radio-input-element id="weight-both" name=name value="both" checked=isBoth}}
+				<span>Both</span>
+			</label>
+		</div>
+	</div>
+{{/materialize/radio-input}}

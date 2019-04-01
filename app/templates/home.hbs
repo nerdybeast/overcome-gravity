@@ -1,0 +1,23 @@
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">Programs</span>
+		<a class="btn-floating btn-small red">
+			<i class="large material-icons">mode_edit</i>
+		</a>
+	</div>
+</div>
+
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">Individual Workouts</span>
+		<div class="collection">
+			{{#each model.workouts as |workout|}}
+				{{#link-to "workout" workout.id class="collection-item"}}
+					{{workout.name}}
+				{{/link-to}}
+			{{/each}}
+		</div>
+	</div>
+</div>
+
+{{outlet}}
