@@ -1,3 +1,7 @@
+# Archived
+
+### This repo was a first attempt at building a workout app tailored towards strength sports (Olympic Weightlifting, Powerlifting, etc...)
+
 # overcome-gravity
 
 This README outlines the details of collaborating on this Ember application.
